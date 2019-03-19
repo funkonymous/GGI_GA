@@ -36,6 +36,8 @@ add_executable(GGI_ACCEL
     DataManipulation/dataword.cpp
     DataManipulation/enumterminalsmap.h
     DataManipulation/enumterminalsmap.cpp
+    DataManipulation/database.h
+    DataManipulation/database.cpp
 )
 
 

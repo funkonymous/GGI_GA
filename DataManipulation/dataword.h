@@ -2,10 +2,10 @@
 #define DATAWORD_H
 
 #include <string>
-#include "enumterminalsmap.h"
 #include "datautilities.h"
+#include "enumterminalsmap.h"
 
-// A class for each words in the dataset is implemented in order for
+// A class for each word in the dataset is implemented in order for
 // each word to be stored.
 //
 //  * Every node in a list represents a letter of the word.
@@ -38,14 +38,16 @@
 
 class DataWord
 {
-public :
+public:
     DataWord(std::string w,EnumTerminalsMap &m); // Create the representation of the string
                                                  // in enumerated form
     ~DataWord();                                 // Free any allocated memory
     size_t operator[](size_t n);                 // Get the nth symbol matrix-alike style
-private :
-    LetterPtr word = NULL;  // Head of the list that represents the word
-    int wordLength;         // Length of the word
+    void printWord();                            // Print the enumerated word
+    size_t size();                               // The number of letters in the word
+private:
+    LetterPtr word;         // Head of the list that represents the word
+    size_t wordLength;      // Length of the word
 };
 
 #endif // DATAWORD_H

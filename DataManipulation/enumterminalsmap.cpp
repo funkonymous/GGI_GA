@@ -15,6 +15,7 @@ size_t findInMap(SymbolMapPtr *Map, char c, bool add = DONTADD);       // Search
 
 using namespace std;
 
+//Constructor
 EnumTerminalsMap::EnumTerminalsMap(std::string fname) : Map(NULL), MapSize(0)
 {
     string line;
@@ -62,6 +63,7 @@ void EnumTerminalsMap::appendMapWithData(std::string fname){
     printMap(Map);
 }
 
+//Destructor
 EnumTerminalsMap::~EnumTerminalsMap(){
     SymbolMapPtr currPtr;
     SymbolMapPtr head = Map;
@@ -86,7 +88,7 @@ void insertMappedSymbol(SymbolMapPtr *Map, char Letter, size_t Value){
             currPtr->nextSymbol = newPtr;  // Push new node
         }
     }
-    else cout << "Out of memory..." << endl;
+    else cout << "Out of memory...(Terminals Map creation)" << endl;
 }
 
 void printMap(SymbolMapPtr Map){
