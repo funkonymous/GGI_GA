@@ -4,13 +4,13 @@
 #include <iostream>
 
 // Helpful functions for the back-end of the class
-void insertLetter(LetterPtr *word, char c,EnumTerminalsMap &m);  // Push a letter in the word
-void printWord(LetterPtr word);                                  // Print enumerated word
+LetterPtr insertLetter(LetterPtr *word, LetterPtr l, char c,EnumTerminalsMap &m);  // Push a letter in the word
+void printWord(LetterPtr word);                                                    // Print enumerated word
 
 //Constructor
 DataWord::DataWord(std::string w,EnumTerminalsMap &m) : word(NULL), wordLength(w.size())
 {
-    for(size_t i = 0;i<wordLength;++i) insertLetter(&word, w[i], m);
+    for(size_t i = 0;i<wordLength;++i) LastLetter = insertLetter(&word, LastLetter, w[i], m);
 }
 
 //Destructor
@@ -53,16 +53,21 @@ size_t DataWord::size(){
     return wordLength;
 }
 
-void insertLetter(LetterPtr *word, char c,EnumTerminalsMap &m){
-    LetterPtr newPtr = (LetterPtr) malloc( sizeof(Letter) );           // New letter
-    LetterPtr currPtr = *word;                                         // Ptr to the word structure
-    if(newPtr != NULL){                                                // Memory allocated
-        newPtr->value = m.returnEnum(c);                               // letter value
-        newPtr->nextLetter = NULL;                                     // end of struct
-        if(*word == NULL ) *word = newPtr;                             // first symbol
+LetterPtr insertLetter(LetterPtr *word, LetterPtr l, char c, EnumTerminalsMap &m){
+    LetterPtr newPtr = (LetterPtr) malloc( sizeof(Letter) );   // New letter
+    LetterPtr currPtr = *word;                                 // Ptr to the word structure
+    if(newPtr != NULL){                                        // Memory allocated
+        newPtr->value = m.returnEnum(c);                       // letter value
+        newPtr->nextLetter = NULL;                             // end of struct
+        if(*word == NULL ) {
+            *word = newPtr;                                    // first symbol
+            l = newPtr;
+            return l;
+        }
         else{
-            while (currPtr->nextLetter) currPtr = currPtr->nextLetter; // find last letter in word
-            currPtr->nextLetter = newPtr;                              // Push new letter
+            l->nextLetter = newPtr;                            // find last letter in word
+            l = l->nextLetter;                                 // Push new letter
+            return l;
         }
     }
     else std::cout << "Out of memory...(Word creation)" << std::endl;  // Failed to allocate memory

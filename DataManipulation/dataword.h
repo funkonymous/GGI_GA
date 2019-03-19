@@ -12,6 +12,8 @@
 //
 //  * Reading a string, each letter is appended in a list top-down.
 //
+//  * The insertion is O(1)
+//
 // Example:
 //            +--------------------------------+        +-----------+
 //            |            Enumeration map     |        |  String   |
@@ -23,12 +25,12 @@
 //
 //
 //  Is represented as:
-// +----------------+
-// |LetterPtr Word  |
-// +----------------+
-// | Value = 2      |    +----------------+
-// | NextLetter     | -> | Next LetterPtr |
-// +----------------+    +----------------+
+// +----------------+                          +--------------------+
+// |LetterPtr Word  |                          |LetterPtr LastLetter|
+// +----------------+                          +--------------------+
+// | Value = 2      |    +----------------+             |
+// | NextLetter     | -> | Next LetterPtr |             |
+// +----------------+    +----------------+             V
 //                       | Value = 1      |    +----------------+
 //                       | NextSymbol     | -> | Next LetterPtr |
 //                       +----------------+    +----------------+
@@ -47,6 +49,7 @@ public:
     size_t size();                               // The number of letters in the word
 private:
     LetterPtr word;         // Head of the list that represents the word
+    LetterPtr LastLetter;   // Last letter of the list in order to append faster
     size_t wordLength;      // Length of the word
 };
 
