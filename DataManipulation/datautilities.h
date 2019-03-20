@@ -34,7 +34,7 @@ typedef symbolMap *SymbolMapPtr;
 // The building block of the DataBase.
 // See database.h for more info.
 
-class DataWord;
+class DataWord;    // Forward declaration
 struct wordStruct{
     DataWord *word;
     struct wordStruct *nextword;
