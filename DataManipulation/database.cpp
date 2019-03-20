@@ -46,15 +46,15 @@ size_t DataBase::size(){
 
 DataWord &DataBase::operator[](size_t n){
     WordStructPtr CurrPtr;
-    if(n>numberOfData){ //exception handling [returns NULL]
+    if(n>numberOfData){              //exception handling [returns NULL]
         std::cout << "Trying to access non-existent data in DB..." << std::endl;
         return *(CurrPtr->word);
     }
     CurrPtr = data;
-    for(size_t i = 0; i < n; ++i){
+    for(size_t i = 0; i < n; ++i){   // search for the nth instance of the DB
         CurrPtr = CurrPtr->nextword;
     }
-    return *(CurrPtr->word);
+    return *(CurrPtr->word);         // Return a reference to the instance
 }
 
 

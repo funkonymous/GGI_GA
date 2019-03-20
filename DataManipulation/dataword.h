@@ -28,17 +28,17 @@
 //
 //
 //  Is represented as:
-// +----------------+                          +--------------------+
-// |LetterPtr Word  |                          |LetterPtr LastLetter|
-// +----------------+                          +--------------------+
+// +----------------+                          +--------------------+ // This pointer ensures
+// |LetterPtr Word  |                          |LetterPtr LastLetter| // insertion in O(1)
+// +----------------+                          +--------------------+ // time complexity
 // | Value = 2      |    +----------------+             |
 // | NextLetter     | -> | Next LetterPtr |             |
 // +----------------+    +----------------+             V
 //                       | Value = 1      |    +----------------+
-//                       | NextSymbol     | -> | Next LetterPtr |
+//                       | NextLetter     | -> | Next LetterPtr |
 //                       +----------------+    +----------------+
 //                                             | Value = 3      |
-//                                             | NextSymbol     | -> nullptr
+//                                             | NextLetter     | -> nullptr
 //                                             +----------------+
 
 class DataWord

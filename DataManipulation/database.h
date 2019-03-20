@@ -21,6 +21,27 @@
 // * The insertion in the DB of a new word is O(1).
 //
 // * Indexing in this class for the [] operator starts from 0.
+//
+// Example : Enumerated words -> 123 321 23 are represented as :
+//
+//
+//                                                  +----------------------------+ // This pointer ensures
+//                                                  | WordStructPointer LastData | // O(1) time complexity
+//                                                  +----------------------------+ // for data registration
+//                                                                           |
+//                                                                           V
+// +--------------------------+      +--------------------------+      +--------------------------+
+// | WordStructPtr data       |  +-->| Next WordStructData      |  +-->| Next WordStructData      |
+// +--------------------------+  |   +--------------------------+  |   +--------------------------+
+// | Next word                |--+   | Next word                |--+   | Next word                |-> nullPtr
+// | Ptr to DataWord instance |      | Ptr to DataWord instance |      | Ptr to DataWord instance |
+// +--------------------------+      +--------------------------+      +--------------------------+
+//          |                                      |                                |
+//          V                                      V                                V
+// +------------------------------+       +--------------+                  +-------------+
+// | DataWord 123 (see dataword.h)|       | DataWord 321 |                  | DataWord 23 |
+// +------------------------------+       +--------------+                  +-------------+
+//
 
 class DataBase
 {
