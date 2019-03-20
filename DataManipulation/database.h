@@ -17,6 +17,10 @@
 //
 // * In an instance (e.g. Database DB(file,map)), DB[n][m] returns the mth letter of the
 // * nth word in an enumerated file. Matrix-alike manipulation of the data.
+//
+// * The insertion in the DB of a new word is O(1).
+//
+// * Indexing in this class for the [] operator starts from 0.
 
 class DataBase
 {
@@ -25,6 +29,8 @@ public:
                                                       // file with an enumeration map
     ~DataBase();                                      // Free any allocated memory
     size_t size();                                    // Get the number of instances in the DB
+    DataWord &operator[](size_t n);                   // Return the nth word instance in the DB
+                                                      // as an lvalue.
 private:
     WordStructPtr data;                               // The data struct
     WordStructPtr lastData;                           // For faster insertion

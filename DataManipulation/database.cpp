@@ -4,14 +4,13 @@
 
 // Helpful functions for the back-end of the class
 WordStructPtr insertWord(WordStructPtr *word, WordStructPtr last, std::string w, EnumTerminalsMap &m);  // Push a word in the DB
-                                                                                                        // and return a pointer to
-                                                                                                        // the last element
-
+                                                                                                        // and return a pointer to                                                                                                     // the last element
 using namespace std;
 
 //Constructor
 DataBase::DataBase(std::string fname, EnumTerminalsMap &m) : data(NULL), numberOfData(0)
 {
+    const clock_t begin_time = clock();                       // Count time for DB generation
     string line;
     ifstream infile(fname); // open dataset
     // Find all the unique terminals for the grammar
@@ -24,6 +23,8 @@ DataBase::DataBase(std::string fname, EnumTerminalsMap &m) : data(NULL), numberO
         }
     }
     else cout << "Could not open file " << fname << "!!" << endl;
+    cout << numberOfData << " instances read in " <<
+            float( clock () - begin_time ) /  CLOCKS_PER_SEC << " seconds" << endl;
 }
 
 //Destructor
@@ -38,6 +39,24 @@ DataBase::~DataBase(){
     std::cout << "Freed memory for " << numberOfData
               << " database instances" << std::endl;
 }
+
+size_t DataBase::size(){
+    return numberOfData;
+}
+
+DataWord &DataBase::operator[](size_t n){
+    WordStructPtr CurrPtr;
+    if(n>numberOfData){ //exception handling [returns NULL]
+        std::cout << "Trying to access non-existent data in DB..." << std::endl;
+        return *(CurrPtr->word);
+    }
+    CurrPtr = data;
+    for(size_t i = 0; i < n; ++i){
+        CurrPtr = CurrPtr->nextword;
+    }
+    return *(CurrPtr->word);
+}
+
 
 WordStructPtr insertWord(WordStructPtr *wordM, WordStructPtr last, std::string w, EnumTerminalsMap &m){
     WordStructPtr newPtr = (WordStructPtr) malloc( sizeof(WordStruct) ); // Gnerate a new word node

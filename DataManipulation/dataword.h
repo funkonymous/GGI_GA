@@ -12,7 +12,10 @@
 //
 //  * Reading a string, each letter is appended in a list top-down.
 //
-//  * The insertion is O(1)
+//  * The insertion is O(1).
+//
+//  * Indexing in the letters of the word starts from zero up to lenght - 1
+//  * C++ - alike indexing.
 //
 // Example:
 //            +--------------------------------+        +-----------+

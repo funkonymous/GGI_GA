@@ -13,12 +13,7 @@ int main()
 {
     string f1("DataSets/dna_cds.dat");
     string f2("DataSets/names_txt.dat");
-    string f3("ATGCNRS");
-    EnumTerminalsMap M1(f1); /*
-    DataWord D(f3,M1);
-    D.printWord();
-    for(size_t i = 0; i < D.size(); ++i) cout << D[i] << " ";
-    cout << endl;*/
+    EnumTerminalsMap M1(f1);
     DataBase Dat(f1,M1);
     return 0;
 }
