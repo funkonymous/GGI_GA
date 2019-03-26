@@ -3,25 +3,18 @@
 // Headers
 #include <iostream>
 
-// Helpful functions for the back-end of the class
-LetterPtr insertLetter(LetterPtr *word, LetterPtr l, char c,EnumTerminalsMap &m);  // Push a letter in the word
-void printWord(LetterPtr word);                                                    // Print enumerated word
 
 //Constructor
-DataWord::DataWord(std::string w,EnumTerminalsMap &m) : word(NULL), wordLength(w.size())
+DataWord::DataWord(std::string w,EnumTerminalsMap &m) : wordLength(w.size())
 {
-    for(size_t i = 0;i<wordLength;++i) LastLetter = insertLetter(&word, LastLetter, w[i], m);
+    word = (size_t *) malloc(wordLength*sizeof(size_t));
+    for(size_t i = 0;i<wordLength;++i) word[i] = m.returnEnum(w[i]);
 }
+
 
 //Destructor
 DataWord::~DataWord(){
-    LetterPtr currPtr;
-    LetterPtr head = word;
-    while ((currPtr = head) != NULL) {             // set curr to head, stop if list empty.
-        head = head->nextLetter;                   // advance head to next element.
-        free (currPtr);                            // delete saved pointer.
-    }
-    //std::cout << "Freed memory for data word" << std::endl;
+    free(word);
 }
 
 //Operator overloading
@@ -31,44 +24,18 @@ size_t DataWord::operator[](size_t n){
                      "ignored and returned zero instead!!" << std::endl;
         return 0;
     }
-    LetterPtr currPtr = word;
-    for(size_t i = 0; i < n; ++i){
-        if(currPtr->nextLetter == NULL) std::cout << "Bad memory read!!"  // exception handling
-                                                  << std::endl;
-        currPtr = currPtr->nextLetter;
-    }
-    return currPtr->value;                                                // return nth letter
+    return word[n];
 }
 
-void DataWord::printWord(){
-    LetterPtr currPtr = word;
-    for(size_t i = 0; i < wordLength; ++i){
-        std::cout << currPtr->value << " ";
-        currPtr = currPtr->nextLetter;
+void DataWord::printWord() const{
+    for(size_t i = 0; i < wordLength;++i){
+        std::cout << word[i] << " ";
     }
     std::cout << std::endl;
 }
 
-size_t DataWord::size(){
+size_t DataWord::size() const{
     return wordLength;
 }
 
-LetterPtr insertLetter(LetterPtr *word, LetterPtr l, char c, EnumTerminalsMap &m){
-    LetterPtr newPtr = (LetterPtr) malloc( sizeof(Letter) );   // New letter
-    LetterPtr currPtr = *word;                                 // Ptr to the word structure
-    if(newPtr != NULL){                                        // Memory allocated
-        newPtr->value = m.returnEnum(c);                       // letter value
-        newPtr->nextLetter = NULL;                             // end of struct
-        if(*word == NULL ) {
-            *word = newPtr;                                    // first symbol
-            l = newPtr;
-            return l;
-        }
-        else{
-            l->nextLetter = newPtr;                            // find last letter in word
-            l = l->nextLetter;                                 // Push new letter
-            return l;
-        }
-    }
-    else std::cout << "Out of memory...(Word creation)" << std::endl;  // Failed to allocate memory
-}
+

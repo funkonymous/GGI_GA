@@ -2,19 +2,6 @@
 #define DATAUTILITIES_H
 
 
-//+-------------- DataWord Utilities -------------------------------+
-// The building block of the database. Each word is defined as a list.
-// See dataword.h for more info.
-struct letter{
-    size_t value;
-    struct letter *nextLetter;
-};
-
-typedef letter Letter;
-typedef Letter *LetterPtr;
-//+-----------------------------------------------------------------+
-
-
 //+-------------- EnumTerminals Map Utilities ----------------------+
 // The building block of the enumeration map.
 // See enumterminals.h for more info.
@@ -36,7 +23,7 @@ typedef symbolMap *SymbolMapPtr;
 
 class DataWord;    // Forward declaration
 struct wordStruct{
-    DataWord *word;
+    DataWord *word; // Opaque ptr
     struct wordStruct *nextword;
 };
 
