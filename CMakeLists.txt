@@ -43,6 +43,10 @@ add_executable(GGI_ACCEL
     GreibachImplementation/grammar.cpp
     GreibachImplementation/greibachsets.h
     GreibachImplementation/greibachsets.cpp
+    GreibachImplementation/greibachnormalformutilities.h
+
+    GeneticAlgorithm/algorithmvariables.h
+    GeneticAlgorithm/algorithmvariables.cpp
 )
 
 
