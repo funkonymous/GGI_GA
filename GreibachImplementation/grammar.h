@@ -10,7 +10,7 @@ class Grammar
 public:
     Grammar();              // Random constructor -> From sets {TerminalSymbols,NonTerminalSymbols}
                             // generate a random grammar in the GNF
-    Grammar();              // Explicit constructor -> From a GA genome string convert to GNF
+    //Grammar();              // Explicit constructor -> From a GA genome string convert to GNF
     ~Grammar();             // Destructor -> Free any allocated memory
 
 private:

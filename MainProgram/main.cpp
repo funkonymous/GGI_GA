@@ -6,6 +6,7 @@
 #include "dataword.h"
 #include "enumterminalsmap.h"
 #include "database.h"
+#include "greibachsets.h"
 
 using namespace std;
 
@@ -15,5 +16,7 @@ int main()
     string f2("DataSets/names_txt.dat");
     EnumTerminalsMap M1(f1);
     DataBase Dat(f1,M1);
+    GreibachSets Sets(M1,10);
+    Sets.printSets();
     return 0;
 }
