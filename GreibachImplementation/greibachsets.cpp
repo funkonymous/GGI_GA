@@ -4,17 +4,27 @@
 #include <iostream>
 #include <iomanip>
 
-// Constructor
+// Constructor <- Assign values to sets S, N, T
 GreibachSets::GreibachSets(EnumTerminalsMap &m, size_t NonTermSize)
-    : StartSymbol(0), TerminalsStart(1), TerminalsEnd(m.getMapSize())
+    : StartSymbol(0), TerminalsStart(1), TerminalsEnd(m.getMapSize()) // Fixed values
 {
-    NonTerminalStart = TerminalsEnd + 1;
-    NonTerminalEnd = TerminalsEnd + NonTermSize;
+    NonTerminalStart = TerminalsEnd + 1;            // Start of Non-Terminal Symbols set
+    NonTerminalEnd = TerminalsEnd + NonTermSize;    // End of Non-Terminals Symbols set after
+                                                    // selected length
 }
 
 // Dummy destructor
 GreibachSets::~GreibachSets(){
-    ;
+    ;   // No memory dynamically allocated
+}
+
+size_t GreibachSets::getRandomTerminal() const{
+    return rand() % TerminalsEnd + 1;
+}
+
+size_t GreibachSets::getRandomNonTerminal() const{
+    return ( rand() % ( NonTerminalEnd - NonTerminalStart + 2 ) + NonTerminalStart ) %
+            (NonTerminalEnd + 1);
 }
 
 void GreibachSets::printSets() const{
