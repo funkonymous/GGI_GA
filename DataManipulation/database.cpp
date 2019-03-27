@@ -40,7 +40,7 @@ DataBase::~DataBase(){
               << " database instances" << std::endl;
 }
 
-size_t DataBase::size(){
+size_t DataBase::size() const{
     return numberOfData;
 }
 

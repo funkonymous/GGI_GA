@@ -38,6 +38,11 @@ add_executable(GGI_ACCEL
     DataManipulation/enumterminalsmap.cpp
     DataManipulation/database.h
     DataManipulation/database.cpp
+
+    GreibachImplementation/grammar.h
+    GreibachImplementation/grammar.cpp
+    GreibachImplementation/greibachsets.h
+    GreibachImplementation/greibachsets.cpp
 )
 
 

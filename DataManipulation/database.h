@@ -49,7 +49,7 @@ public:
     DataBase(std::string fname, EnumTerminalsMap &m); // Construct a DB for a corresponding ASCII
                                                       // file with an enumeration map
     ~DataBase();                                      // Free any allocated memory
-    size_t size();                                    // Get the number of instances in the DB
+    size_t size() const;                              // Get the number of instances in the DB
     DataWord &operator[](size_t n);                   // Return the nth word instance in the DB
                                                       // as an lvalue.
 private:
