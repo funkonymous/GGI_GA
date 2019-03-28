@@ -3,6 +3,7 @@
 
 // Headers for the class
 #include "greibachnormalformutilities.h"
+#include "algorithmvariables.h"
 
 // This class represents a formal grammar in the Greibach Normal Form (GNF).
 // The internal memory structure of this represntation is compatible for use
@@ -15,10 +16,10 @@
 class Grammar
 {
 public:
-    Grammar();              // Random constructor -> From sets {TerminalSymbols,NonTerminalSymbols}
-                            // generate a random grammar in the GNF
-    //Grammar();              // Explicit constructor -> From a GA genome string convert to GNF
-    ~Grammar();             // Destructor -> Free any allocated memory
+    Grammar(AlgorithmVariables &Vars);  // Random constructor -> From sets {TerminalSymbols,NonTerminalSymbols}
+                                        // generate a random grammar in the GNF
+    //Grammar();                        // Explicit constructor -> From a GA genome string convert to GNF
+    ~Grammar();                         // Destructor -> Free any allocated memory
 
 private:
     GrammarCodonPtr Genome; //
