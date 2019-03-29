@@ -11,14 +11,23 @@
 // * There are predefined values that change through set methods as it would be
 // * really long to implement a constructor with 9 variables.
 
+// Na grapsw set/get methodous gia kathe member
+
+class GreibachSets;
+
 class AlgorithmVariables
 {
 public:
     AlgorithmVariables();                 // Dummy constructor
     // Get methods
     size_t getNoNonTerms() const;
+    size_t getTerm() const;               // Get a random Terminal
+    size_t getNonTerm() const;            // Get a random Non-Terminal
     // Set methods
     void setGNFsets(EnumTerminalsMap &M); // This must be done during initialization
+
+    // TODO
+    // void printAlgoVars() const;
 private:
     // SGA variables
     float mutationRate = 0.03;      // Mutation rate 0.03 = 3%
@@ -26,7 +35,7 @@ private:
     float ParentalPortion = 0.85;   // Natural selection percentage
     float elitism = 0.03;           // Percentage of individuals kept for next pool
     // GNF variables
-    GreibachSets Gsets;             // The sets of terminal and mom-terminal symbols
+    GreibachSets Gsets;             // The sets of terminal and non-terminal symbols
     size_t NoNTerms = 20;           // Non-Terminals set size
     size_t MaxRuleLen = 5;          // Max number of symbols to a production rule Symbols = [2~MaxRuleLen]
     size_t MaxNoRules = 50;         // Max number of production rules

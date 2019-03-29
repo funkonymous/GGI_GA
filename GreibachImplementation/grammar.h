@@ -22,7 +22,12 @@ public:
     ~Grammar();                         // Destructor -> Free any allocated memory
 
 private:
-    GrammarCodonPtr Genome; //
+    GrammarCodonPtr Genome;                   // Pointer to start of the genome that represents a GNF
+    GrammarCodonPtr LastCodon;                // Pointer to the last symbol of the genome
+    size_t NumberOfRules;                     // Number of rules in the genome
+    size_t GenomeLength;                      // Number of symbols in the whole grammar
+                                              // Generate a rule in the Greibach Normal Form +-+
+    GrammarCodonPtr generateRule(AlgorithmVariables &V, GrammarCodonPtr LastC, size_t &Len);           // <-+
 };
 
 #endif // GRAMMAR_H

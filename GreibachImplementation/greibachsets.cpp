@@ -5,14 +5,17 @@
 #include <iomanip>
 
 // Constructor <- Assign values to sets S, N, T
-GreibachSets::GreibachSets(EnumTerminalsMap &m, AlgorithmVariables &A)
+GreibachSets::GreibachSets(EnumTerminalsMap &m, size_t NtSize)
     : StartSymbol(0), TerminalsStart(1), TerminalsEnd(m.getMapSize()) // Fixed values
 {
     NonTerminalStart = TerminalsEnd + 1;                  // Start of Non-Terminal Symbols set
-    NonTerminalEnd = TerminalsEnd + A.getNoNonTerms();    // End of Non-Terminals Symbols set after
+    NonTerminalEnd = TerminalsEnd + NtSize;               // End of Non-Terminals Symbols set after
                                                           // selected length
 }
 
+GreibachSets::GreibachSets(){
+    ; // Dummy constructor
+}
 // Dummy destructor
 GreibachSets::~GreibachSets(){
     ;   // No memory dynamically allocated

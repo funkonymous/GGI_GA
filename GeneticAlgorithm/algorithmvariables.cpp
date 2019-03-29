@@ -2,11 +2,21 @@
 
 AlgorithmVariables::AlgorithmVariables()
 {
-    ; // This is a dummy constructor
+    ; // dummy constructor
 }
 
 size_t AlgorithmVariables::getNoNonTerms() const{
     return NoNTerms;
 }
 
-void AlgorithmVariables::setGNFsets(EnumTerminalsMap &M);
+void AlgorithmVariables::setGNFsets(EnumTerminalsMap &M){
+    Gsets = GreibachSets(M,NoNTerms);  // Set the sets T,N
+}
+
+size_t AlgorithmVariables::getTerm() const{
+    return Gsets.getRandomTerminal();
+}
+
+size_t AlgorithmVariables::getNonTerm() const{
+    return Gsets.getRandomNonTerminal();
+}

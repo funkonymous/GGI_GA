@@ -7,6 +7,7 @@
 #include "database.h"
 #include "greibachsets.h"
 #include "algorithmvariables.h"
+#include "grammar.h"
 
 using namespace std;
 
@@ -25,7 +26,7 @@ int main()
     EnumTerminalsMap M1(f1);
     DataBase Dat(f1,M1);
     AlgorithmVariables Vars;
-    GreibachSets Sets(M1,Vars);
-    Sets.printSets();
+    Vars.setGNFsets(M1);
+    Grammar G(Vars);
     return 0;
 }
