@@ -26,8 +26,10 @@ private:
     GrammarCodonPtr LastCodon;                // Pointer to the last symbol of the genome
     size_t NumberOfRules;                     // Number of rules in the genome
     size_t GenomeLength;                      // Number of symbols in the whole grammar
-                                              // Generate a rule in the Greibach Normal Form +-+
-    GrammarCodonPtr generateRule(AlgorithmVariables &V, GrammarCodonPtr LastC, size_t &Len);           // <-+
+                                              // Generate a rule in the Greibach Normal Form     o---+
+    // In this method only V is a true variable, everything else is a value changed by reference     |
+    // or by a direct pointer to the memory block that a struct exists                               |
+    GrammarCodonPtr generateRule(AlgorithmVariables &V, GrammarCodonPtr *LastC, size_t &Len); // <---+
 };
 
 #endif // GRAMMAR_H

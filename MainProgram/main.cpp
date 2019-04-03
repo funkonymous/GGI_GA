@@ -21,6 +21,7 @@ using namespace std;
 // 5. SGA
 int main()
 {
+    srand(time(NULL));
     string f1("DataSets/dna_cds.dat");
     string f2("DataSets/names_txt.dat");
     EnumTerminalsMap M1(f1);

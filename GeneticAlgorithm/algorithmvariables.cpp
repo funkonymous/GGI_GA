@@ -20,3 +20,11 @@ size_t AlgorithmVariables::getTerm() const{
 size_t AlgorithmVariables::getNonTerm() const{
     return Gsets.getRandomNonTerminal();
 }
+
+size_t AlgorithmVariables::getMaxRuleLen() const{
+    return MaxRuleLen;
+}
+
+size_t AlgorithmVariables::getMaxNoRules() const{
+    return MaxNoRules;
+}
