@@ -29,5 +29,6 @@ int main()
     AlgorithmVariables Vars;
     Vars.setGNFsets(M1);
     Grammar G(Vars);
+    G.print();
     return 0;
 }

@@ -40,7 +40,7 @@ private:
     GreibachSets Gsets;             // The sets of terminal and non-terminal symbols
     size_t NoNTerms = 20;           // Non-Terminals set size
     size_t MaxRuleLen = 5;          // Max number of symbols to a production rule Symbols = [2~MaxRuleLen]
-    size_t MaxNoRules = 5;          // Max number of production rules
+    size_t MaxNoRules = 50;         // Max number of production rules
     float subParse = 0.01;          // Partial parse of a word contribution
     // Fitness estimation
     float weightsMatrix[2][2] = { { 1.0, 1.0 } , { 1.0, 1.0} };
