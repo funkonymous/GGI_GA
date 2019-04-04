@@ -79,6 +79,57 @@ void Grammar::print() const{
         }
         std::cout << currPtr->Symbol << std::endl;
     }
+
+}
+
+size_t Grammar::ruleLength(size_t Rule) const{
+    if(Rule>=NumberOfRules){
+        std::cout << "Invalid index in rules accessing of Grammar" << std::endl;
+        return 0;
+    }
+    return RulesLen[Rule];
+}
+
+size_t Grammar::ruleHead(size_t Rule) const{
+    if(Rule>=NumberOfRules){
+        std::cout << "Invalid index in rules accessing of Grammar" << std::endl;
+        return 0;
+    }
+    return Rules[Rule]->Symbol;
+}
+
+size_t Grammar::ruleTerminal(size_t Rule) const{
+    if(Rule>=NumberOfRules){
+        std::cout << "Invalid index in rules accessing of Grammar" << std::endl;
+        return 0;
+    }
+    return (Rules[Rule]->nextCodon)->Symbol;
+}
+
+void Grammar::ruleBody(size_t Rule, GrammarCodonPtr *Start, GrammarCodonPtr *End){
+    if(Rule>=NumberOfRules){
+        std::cout << "Invalid index in rules accessing of Grammar" << std::endl;
+        *Start = NULL;
+        *End = NULL;
+        return;
+    }
+    if(Rule == NumberOfRules - 1 && RulesLen[Rule] > 2){
+        *Start = (Rules[Rule]->nextCodon)->nextCodon; // Head -> next = Terminal -> next = Body
+        *End = LastCodon;
+        return;
+    }
+    else if(Rule < NumberOfRules - 1 && RulesLen[Rule] > 2){
+        *Start = (Rules[Rule]->nextCodon)->nextCodon; // Head -> next = Terminal -> next = Body
+        *End = *Start;
+        for(size_t i = 0; i < RulesLen[Rule] - 3; ++i){
+            *End = (*End)->nextCodon;
+        }
+        return;
+    }
+    std::cout << "There are no non-terminal symbols to return in the body of the accessed rule" <<
+                 std::endl;
+    *Start = NULL;
+    *End = NULL;
 }
 
 GrammarCodonPtr createNonTerm(AlgorithmVariables &V){
