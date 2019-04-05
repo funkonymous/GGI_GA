@@ -27,7 +27,7 @@ public:
     size_t getMaxNoRules() const;         // Get the maximum number of rules in a GNF
     // Set methods
     void setGNFsets(EnumTerminalsMap &M); // This must be done during initialization
-
+    void setMaxRuleLen(size_t length);    // Set the maximum length of rule
     // TODO
     // void printAlgoVars() const;
 private:

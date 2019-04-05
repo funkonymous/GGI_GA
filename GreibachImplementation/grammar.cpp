@@ -153,9 +153,9 @@ void Grammar::ruleBody(size_t Rule, GrammarCodonPtr *Start, GrammarCodonPtr *End
     *End = NULL;
 }
 
-bool Grammar::parse(DataWord &data){
-    std::cout << "Parser initialized" << std::endl;
-    return true;
+bool Grammar::parse(DataWord &data, size_t &depth){
+    depth = data.size();
+    return parse(data,0,data.size(),0,depth);
 }
 
 bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, size_t Head, size_t &depth){
@@ -204,7 +204,18 @@ bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, GrammarCodonPtr Fir
                 depth = 0;
                 return true;
             }
-            if(depth1+depth2<depth) depth = depth1 + depth2;
+            if(depth1+depth2<depth) depth = depth1 + depth2; //update depth
+        }
+    }
+    else{ // more than two terminals
+        size_t depth1,depth2;
+        for(size_t i = wStart + 1; i < wEnd - 1; ++i){
+            if( parse(w,wStart,wStart+i,FirstHead->Symbol,depth1) &&
+                    parse(w,wStart+i,wEnd,FirstHead->nextCodon,LastHead,depth2)){
+                depth = 0;
+                return true;
+            }
+            if(depth1+depth2<depth) depth = depth1 + depth2; //update depth
         }
     }
     return false;

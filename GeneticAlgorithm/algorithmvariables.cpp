@@ -28,3 +28,7 @@ size_t AlgorithmVariables::getMaxRuleLen() const{
 size_t AlgorithmVariables::getMaxNoRules() const{
     return MaxNoRules;
 }
+
+void AlgorithmVariables::setMaxRuleLen(size_t length){
+    MaxRuleLen = length;
+}

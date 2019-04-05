@@ -22,14 +22,20 @@ using namespace std;
 int main()
 {
     srand(time(NULL));
-    string f1("DataSets/dna_cds.dat");
-    //string f2("DataSets/names_txt.dat");
+    //string f1("DataSets/dna_cds.dat");
+    string f1("DataSets/smalldata.dat");
+    //string f1("DataSets/names_txt.dat");
     EnumTerminalsMap M1(f1);
     DataBase Dat(f1,M1);
     AlgorithmVariables Vars;
+    Vars.setMaxRuleLen(3);
     Vars.setGNFsets(M1);
     Grammar G(Vars);
-    //G.print();
-    bool b = G.parse(Dat[0]);
+    G.print();
+    for(size_t i = 0; i<Dat.size();++i){
+        Dat[i].printWord();
+    }
+    size_t depth;
+    bool b = G.parse(Dat[0],depth);
     return 0;
 }

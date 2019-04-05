@@ -5,7 +5,7 @@
 
 
 //Constructor
-DataWord::DataWord(std::string w,EnumTerminalsMap &m) : wordLength(w.size())
+DataWord::DataWord(std::string w,EnumTerminalsMap &m) : wordLength(w.size()-1)
 {
     word = (size_t *) malloc(wordLength*sizeof(size_t));              // allocate needed memory
     for(size_t i = 0;i<wordLength;++i) word[i] = m.returnEnum(w[i]);  // save enumerated word in

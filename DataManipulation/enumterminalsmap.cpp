@@ -24,10 +24,11 @@ EnumTerminalsMap::EnumTerminalsMap(std::string fname) : Map(NULL), MapSize(0)
     if(infile.is_open()){
         std::cout << "Reading file : " << fname << std::endl;
         while(getline(infile,line)){
-            for(size_t i = 0;i<line.size();++i){
+            for(size_t i = 0;i<line.size()-1;++i){
                 if(!findInMap(&Map,line[i],ADD)){             // search symbol and ADD if found
                     MapSize++;                                // else create new integer and
                     insertMappedSymbol(&Map,line[i],MapSize); // append the enumeration map
+                    std::cout << line[i] << std::endl;
                 }
             }
         }
@@ -51,10 +52,10 @@ void EnumTerminalsMap::appendMapWithData(std::string fname){
     if(infile.is_open()){
         std::cout << "Reading more files : " << fname << std::endl;
         while(getline(infile,line)){
-            for(size_t i = 0;i<line.size();++i){
+            for(size_t i = 0;i<line.size()-1;++i){
                 if(!findInMap(&Map,line[i],ADD)){
                     MapSize++;
-                    insertMappedSymbol(&Map,line[i],MapSize);
+                    insertMappedSymbol(&Map, (char) line[i],MapSize);
                 }
             }
         }
@@ -118,7 +119,7 @@ size_t findInMap(SymbolMapPtr *Map, char c, bool add){
             if(add) currPtr->timesFound ++; // and add == ADD, count
             return currPtr->value;          // the occurence and return true
         }
-        if(currPtr->nextSymbol) currPtr = currPtr->nextSymbol;
+        if(currPtr->nextSymbol != NULL) currPtr = currPtr->nextSymbol;
         else currPtr = NULL;
     }while(currPtr);
     return 0;

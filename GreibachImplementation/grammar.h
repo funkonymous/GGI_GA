@@ -17,13 +17,13 @@
 class Grammar
 {
 public:
-    Grammar(AlgorithmVariables &Vars);      // Random constructor -> From sets {TerminalSymbols,NonTerminalSymbols}
-                                            // generate a random grammar in the GNF
-    //Grammar();                            // Explicit constructor -> From a GA genome string convert to GNF
-    ~Grammar();                             // Destructor -> Free any allocated memory
-    void print() const;                     // Print the grammar rule by rule
-    void printRule(size_t Rule) const;      // Print the rule [Rule]
-    bool parse(DataWord &data);             // Check if the dataword [data] belongs in the grammar
+    Grammar(AlgorithmVariables &Vars);          // Random constructor -> From sets {TerminalSymbols,NonTerminalSymbols}
+                                                // generate a random grammar in the GNF
+    //Grammar();                                // Explicit constructor -> From a GA genome string convert to GNF
+    ~Grammar();                                 // Destructor -> Free any allocated memory
+    void print() const;                         // Print the grammar rule by rule
+    void printRule(size_t Rule) const;          // Print the rule [Rule]
+    bool parse(DataWord &data, size_t &depth);  // Check if the dataword [data] belongs in the grammar
 
 private:
     // Pointers to the grammar
