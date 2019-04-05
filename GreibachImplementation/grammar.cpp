@@ -70,20 +70,41 @@ GrammarCodonPtr Grammar::generateRule(AlgorithmVariables &V, GrammarCodonPtr *La
 }
 
 void Grammar::print() const{
-    GrammarCodonPtr currPtr;
     for(size_t i = 0; i < NumberOfRules; ++i){
-        currPtr = Rules[i];
-        for(size_t j = 0; j < RulesLen[i] - 1 ; ++j){
-            std::cout << currPtr->Symbol << " ";
-            currPtr = currPtr->nextCodon;
-        }
-        std::cout << currPtr->Symbol << std::endl;
+        printRule(i);
     }
+}
 
+void Grammar::printRule(size_t Rule) const{
+    if(Rule >= NumberOfRules){  // Exception handling
+        std::cout << "Cannot access and print rule " << Rule <<
+                     " of grammar" << std::endl;
+        return;
+    }
+    if(Rule == NumberOfRules - 1){
+        GrammarCodonPtr currPtr = Rules[Rule];
+        std::cout << currPtr->Symbol << " -> ";
+        while (currPtr->nextCodon != NULL) {
+            currPtr = currPtr->nextCodon;
+            std::cout << currPtr->Symbol << " ";
+        }
+        std::cout << std::endl;
+        return;
+    }
+    else if(Rule < NumberOfRules - 1){
+        GrammarCodonPtr currPtr = Rules[Rule];
+        std::cout << currPtr->Symbol << " -> ";
+        while (currPtr->nextCodon != Rules[Rule+1]) {
+            currPtr = currPtr->nextCodon;
+            std::cout << currPtr->Symbol << " ";
+        }
+        std::cout << std::endl;
+        return;
+    }
 }
 
 size_t Grammar::ruleLength(size_t Rule) const{
-    if(Rule>=NumberOfRules){
+    if(Rule>=NumberOfRules){   // Exception handling
         std::cout << "Invalid index in rules accessing of Grammar" << std::endl;
         return 0;
     }
@@ -91,7 +112,7 @@ size_t Grammar::ruleLength(size_t Rule) const{
 }
 
 size_t Grammar::ruleHead(size_t Rule) const{
-    if(Rule>=NumberOfRules){
+    if(Rule>=NumberOfRules){   // Exception handling
         std::cout << "Invalid index in rules accessing of Grammar" << std::endl;
         return 0;
     }
@@ -99,7 +120,7 @@ size_t Grammar::ruleHead(size_t Rule) const{
 }
 
 size_t Grammar::ruleTerminal(size_t Rule) const{
-    if(Rule>=NumberOfRules){
+    if(Rule>=NumberOfRules){   // Exception handling
         std::cout << "Invalid index in rules accessing of Grammar" << std::endl;
         return 0;
     }
@@ -107,7 +128,7 @@ size_t Grammar::ruleTerminal(size_t Rule) const{
 }
 
 void Grammar::ruleBody(size_t Rule, GrammarCodonPtr *Start, GrammarCodonPtr *End){
-    if(Rule>=NumberOfRules){
+    if(Rule>=NumberOfRules){   // Exception handling
         std::cout << "Invalid index in rules accessing of Grammar" << std::endl;
         *Start = NULL;
         *End = NULL;
@@ -130,6 +151,63 @@ void Grammar::ruleBody(size_t Rule, GrammarCodonPtr *Start, GrammarCodonPtr *End
                  std::endl;
     *Start = NULL;
     *End = NULL;
+}
+
+bool Grammar::parse(DataWord &data){
+    std::cout << "Parser initialized" << std::endl;
+    return true;
+}
+
+bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, size_t Head, size_t &depth){
+    bool found = false;
+    if(wStart + 1 == wEnd){ // case that the word length = 1
+        for(size_t i = 0; i < NumberOfRules; ++i){
+            if( (ruleHead(i) == Head)&&(ruleTerminal(i) == w[wStart])&&(ruleLength(i) == 2) ){
+                depth = 0;
+                return true;
+            }
+        }
+    }
+    else{
+        GrammarCodonPtr BodyS, BodyE;
+        for(size_t i = 0; i < NumberOfRules; ++i){
+            if( (ruleHead(i) == Head)&&(ruleTerminal(i) == w[0]) ){
+                if( ruleLength(i) == 2 ) found = true;
+                else if (ruleLength(i) == 3){
+                    ruleBody(i, &BodyS, &BodyE);
+                    if(BodyS != NULL)
+                        if(parse(w,wStart+1,wEnd,BodyS->Symbol,depth)) return true;
+                }
+                else if (ruleLength(i) > 3){
+                    if(wEnd-wStart >= ruleLength(i) - 2){ // a little smart prunning
+                        ruleBody(i,&BodyS,&BodyE);
+                        if( BodyS!=NULL && BodyE!=NULL && BodyE!=BodyS){
+                            if(parse(w,wStart+1,wEnd,BodyS,BodyE,depth)) return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if(found && depth>0) depth--;
+    return false;
+}
+
+bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, GrammarCodonPtr FirstHead, GrammarCodonPtr LastHead, size_t &depth){
+    if(FirstHead->nextCodon == LastHead){ // 2 terminals
+        size_t depth1,depth2;
+        for(size_t i = wStart + 1; i < wEnd; ++i){
+            depth1 = i - wStart;
+            depth2 = wEnd - i;
+            if( parse(w,wStart,wStart+i,FirstHead->Symbol,depth1) &&
+                    parse(w,wStart+i,wEnd,LastHead->Symbol,depth2)){
+                depth = 0;
+                return true;
+            }
+            if(depth1+depth2<depth) depth = depth1 + depth2;
+        }
+    }
+    return false;
 }
 
 GrammarCodonPtr createNonTerm(AlgorithmVariables &V){

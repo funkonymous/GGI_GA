@@ -23,12 +23,13 @@ int main()
 {
     srand(time(NULL));
     string f1("DataSets/dna_cds.dat");
-    string f2("DataSets/names_txt.dat");
+    //string f2("DataSets/names_txt.dat");
     EnumTerminalsMap M1(f1);
     DataBase Dat(f1,M1);
     AlgorithmVariables Vars;
     Vars.setGNFsets(M1);
     Grammar G(Vars);
-    G.print();
+    //G.print();
+    bool b = G.parse(Dat[0]);
     return 0;
 }

@@ -22,6 +22,7 @@ public:
     //Grammar();                            // Explicit constructor -> From a GA genome string convert to GNF
     ~Grammar();                             // Destructor -> Free any allocated memory
     void print() const;                     // Print the grammar rule by rule
+    void printRule(size_t Rule) const;      // Print the rule [Rule]
     bool parse(DataWord &data);             // Check if the dataword [data] belongs in the grammar
 
 private:
@@ -43,6 +44,10 @@ private:
     size_t ruleTerminal(size_t Rule) const;   // Return the terminal symbol of the rule [Rule]
     void ruleBody(size_t Rule, GrammarCodonPtr *Start,
                   GrammarCodonPtr *End);      // Return the start and the end of the body through pointers
+    // Parsing functions for the parsing tree
+    bool parse(DataWord &w, size_t wStart, size_t wEnd, size_t Head, size_t &depth);
+    bool parse(DataWord &w, size_t wStart, size_t wEnd, GrammarCodonPtr FirstHead,
+               GrammarCodonPtr LastHead, size_t &depth);
 };
 
 #endif // GRAMMAR_H
