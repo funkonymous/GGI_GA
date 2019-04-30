@@ -18,16 +18,19 @@ class GreibachSets;
 class AlgorithmVariables
 {
 public:
-    AlgorithmVariables();                 // Dummy constructor
+    AlgorithmVariables();                      // Dummy constructor
     // Get methods
-    size_t getNoNonTerms() const;
-    size_t getTerm() const;               // Get a random Terminal
-    size_t getNonTerm() const;            // Get a random Non-Terminal
-    size_t getMaxRuleLen() const;         // Get the maximum size of a rule in a GNF
-    size_t getMaxNoRules() const;         // Get the maximum number of rules in a GNF
+    size_t getNoNonTerms() const;              // Get number of non-terminal symbols
+    size_t getTerm() const;                    // Get a random Terminal
+    size_t getNonTerm() const;                 // Get a random Non-Terminal
+    size_t getMaxRuleLen() const;              // Get the maximum size of a rule in a GNF
+    size_t getMaxNoRules() const;              // Get the maximum number of rules in a GNF
+    size_t getPoolSize() const;                // Get the number of individuals for each generation
     // Set methods
-    void setGNFsets(EnumTerminalsMap &M); // This must be done during initialization
-    void setMaxRuleLen(size_t length);    // Set the maximum length of rule
+    void setGNFsets(EnumTerminalsMap &M);      // This must be done during initialization
+    void setMaxRuleLen(size_t length);         // Set the maximum length of rule
+    void setMaxNofRules(size_t num);           // Set the maximum length of rule
+    void setPoolSize(size_t size);             // Set the number of individuals in every population
     // TODO
     // void printAlgoVars() const;
 private:
@@ -36,6 +39,7 @@ private:
     size_t poolSize = 1000;         // Number of individuals in a generation
     float ParentalPortion = 0.85;   // Natural selection percentage
     float elitism = 0.03;           // Percentage of individuals kept for next pool
+    size_t maxGens = 500;           // Maximum number of generations
     // GNF variables
     GreibachSets Gsets;             // The sets of terminal and non-terminal symbols
     size_t NoNTerms = 20;           // Non-Terminals set size

@@ -32,3 +32,15 @@ size_t AlgorithmVariables::getMaxNoRules() const{
 void AlgorithmVariables::setMaxRuleLen(size_t length){
     MaxRuleLen = length;
 }
+
+size_t AlgorithmVariables::getPoolSize() const{
+    return poolSize;
+}
+
+void AlgorithmVariables::setPoolSize(size_t size){
+    poolSize = size;
+}
+
+void AlgorithmVariables::setMaxNofRules(size_t num){
+    MaxNoRules = num;
+}
