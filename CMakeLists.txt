@@ -47,6 +47,11 @@ add_executable(GGI_ACCEL
 
     GeneticAlgorithm/algorithmvariables.h
     GeneticAlgorithm/algorithmvariables.cpp
+    GeneticAlgorithm/population.h
+    GeneticAlgorithm/population.cpp
+    GeneticAlgorithm/sgautilities.h
+    GeneticAlgorithm/geneticalgorithm.h
+    GeneticAlgorithm/geneticalgorithm.cpp
 )
 
 
