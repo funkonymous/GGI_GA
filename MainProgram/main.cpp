@@ -2,12 +2,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <unistd.h>
+
 
 #include "enumterminalsmap.h"
 #include "database.h"
 #include "greibachsets.h"
 #include "algorithmvariables.h"
 #include "grammar.h"
+//#include "sgautilities.h"
+#include "population.h"
+#include "geneticalgorithm.h"
+
 
 using namespace std;
 
@@ -19,23 +25,30 @@ using namespace std;
 //    - Greibach sets is the only without defaults
 // 4. Initialize population
 // 5. SGA
-int main()
+
+// TODO command line arguments ~ getopt()
+// TODO LAVA github ~ live plots
+int main(int argc, char **argv)
 {
+    /* get options */
+    GeneticAlgorithm G(argc,argv);
+    /*
     srand(time(NULL));
     //string f1("DataSets/dna_cds.dat");
-    string f1("DataSets/smalldata.dat");
-    //string f1("DataSets/names_txt.dat");
+    //string f1("DataSets/smalldata.dat");
+    string f1("DataSets/names_txt.dat");
     EnumTerminalsMap M1(f1);
     DataBase Dat(f1,M1);
     AlgorithmVariables Vars;
-    Vars.setMaxRuleLen(3);
     Vars.setGNFsets(M1);
-    Grammar G(Vars);
-    G.print();
-    for(size_t i = 0; i<Dat.size();++i){
-        Dat[i].printWord();
-    }
-    size_t depth;
-    bool b = G.parse(Dat[0],depth);
-    return 0;
+    //Vars.setMaxRuleLen(50);
+    //Vars.setMaxNofRules(500);
+    Vars.setPoolSize(1000);
+    //printMemory();
+
+    Population p(Vars);
+    //printMemory();
+    //Population p(Vars);
+
+    return 0; //*/
 }
