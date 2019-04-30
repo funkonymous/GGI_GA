@@ -20,7 +20,7 @@ Grammar::Grammar(AlgorithmVariables &Vars)
 
     // Generate the rest of the rules
     for(size_t i = 0; i < Vars.getMaxNoRules()-1; ++i){
-        if(!(rand()%(Vars.getMaxNoRules()-i)));                        // equal probability to break for every number of rules
+        if(!(rand()%(Vars.getMaxNoRules()-i))) break;                  // equal probability to break for every number of rules
         CurrLastPtr->nextCodon = generateRule(Vars,&LastCodon,length); // generate rule
         Rules[NumberOfRules] = CurrLastPtr->nextCodon;                 // Update rules pointer
         RulesLen[NumberOfRules] = length;                              // Update length of each rule
@@ -29,6 +29,34 @@ Grammar::Grammar(AlgorithmVariables &Vars)
         NumberOfRules++;                                               // |
     }
 
+}
+
+Grammar::Grammar(GrammarCodonPtr G, size_t len) : NumberOfRules(0), GenomeLength(len)
+{
+    Genome = G;
+    LastCodon = G;
+    Rules = (GrammarCodonPtr*) malloc( len*sizeof(GrammarCodonPtr) ); // Pointers to rules
+    RulesLen = (size_t *) malloc( (len/2)*sizeof(size_t) ); // Rules length (at most genomelength/2 rules
+                                                            //                   due to GNF)
+    GrammarCodonPtr previousCodon = LastCodon;
+    size_t ruleL = 0;
+    for(size_t i = 0; i < GenomeLength; ++i){
+        ruleL++;
+        if(GenomeLength-i > 1){
+            if(LastCodon->nextCodon->SetOrigin == Terminal){
+                ruleL++;
+                Rules[NumberOfRules] = LastCodon;
+                RulesLen[NumberOfRules] = ruleL;
+                NumberOfRules++;
+                ruleL = 0;
+            }
+        }
+        else{
+            ruleL++;
+        }
+        LastCodon = LastCodon->nextCodon;
+    }
+    RulesLen[NumberOfRules] = ruleL;
 }
 
 Grammar::~Grammar(){
@@ -40,8 +68,10 @@ Grammar::~Grammar(){
     }
     free(Rules);
     free(RulesLen);
+
     std::cout << "Freed memory for " << GenomeLength
-              << " Symbols in the genome" << std::endl;
+              << " Symbols in the genome" ;
+    printf("\33[2K\r");
 }
 
 GrammarCodonPtr Grammar::generateRule(AlgorithmVariables &V, GrammarCodonPtr *LastC, size_t &Len){
@@ -71,8 +101,10 @@ GrammarCodonPtr Grammar::generateRule(AlgorithmVariables &V, GrammarCodonPtr *La
 
 void Grammar::print() const{
     for(size_t i = 0; i < NumberOfRules; ++i){
-        printRule(i);
+        printRule(i);                          // print grammar rule by rule
     }
+    std::cout << "Grammar Length : " << GenomeLength << "\n" <<      // print additional info
+                 "Number of rules : " << NumberOfRules << std::endl;
 }
 
 void Grammar::printRule(size_t Rule) const{
@@ -81,7 +113,7 @@ void Grammar::printRule(size_t Rule) const{
                      " of grammar" << std::endl;
         return;
     }
-    if(Rule == NumberOfRules - 1){
+    if(Rule == NumberOfRules - 1){ // print the last rule
         GrammarCodonPtr currPtr = Rules[Rule];
         std::cout << currPtr->Symbol << " -> ";
         while (currPtr->nextCodon != NULL) {
@@ -91,7 +123,7 @@ void Grammar::printRule(size_t Rule) const{
         std::cout << std::endl;
         return;
     }
-    else if(Rule < NumberOfRules - 1){
+    else if(Rule < NumberOfRules - 1){ // print a random rule
         GrammarCodonPtr currPtr = Rules[Rule];
         std::cout << currPtr->Symbol << " -> ";
         while (currPtr->nextCodon != Rules[Rule+1]) {
@@ -227,4 +259,11 @@ GrammarCodonPtr createNonTerm(AlgorithmVariables &V){
     c->SetOrigin = NonTerminal;
     c->nextCodon = NULL;
     return c;
+}
+
+GrammarCodonPtr Grammar::getGen(){
+    return Genome;
+}
+size_t Grammar::size(){
+    return GenomeLength;
 }

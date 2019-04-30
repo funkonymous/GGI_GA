@@ -6,6 +6,7 @@
 #include "algorithmvariables.h"
 #include "dataword.h"
 
+
 // This class represents a formal grammar in the Greibach Normal Form (GNF).
 // The internal memory structure of this represntation is compatible for use
 // with the genetic operators of the Standard Genetic Algorithm (SGA).
@@ -19,11 +20,13 @@ class Grammar
 public:
     Grammar(AlgorithmVariables &Vars);          // Random constructor -> From sets {TerminalSymbols,NonTerminalSymbols}
                                                 // generate a random grammar in the GNF
-    //Grammar();                                // Explicit constructor -> From a GA genome string convert to GNF
+    Grammar(GrammarCodonPtr G, size_t len);     // Explicit constructor -> From a GA genome string convert to GNF
     ~Grammar();                                 // Destructor -> Free any allocated memory
     void print() const;                         // Print the grammar rule by rule
     void printRule(size_t Rule) const;          // Print the rule [Rule]
     bool parse(DataWord &data, size_t &depth);  // Check if the dataword [data] belongs in the grammar
+    GrammarCodonPtr getGen();                   // afta 8a svhstoun
+    size_t size();
 
 private:
     // Pointers to the grammar
