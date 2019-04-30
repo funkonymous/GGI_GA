@@ -28,7 +28,7 @@ EnumTerminalsMap::EnumTerminalsMap(std::string fname) : Map(NULL), MapSize(0)
                 if(!findInMap(&Map,line[i],ADD)){             // search symbol and ADD if found
                     MapSize++;                                // else create new integer and
                     insertMappedSymbol(&Map,line[i],MapSize); // append the enumeration map
-                    std::cout << line[i] << std::endl;
+                    //std::cout << line[i] << std::endl;      // Print the new symbol
                 }
             }
         }
@@ -90,6 +90,10 @@ void insertMappedSymbol(SymbolMapPtr *Map, char Letter, size_t Value){
         }
     }
     else cout << "Out of memory...(Terminals Map creation)" << endl;
+}
+
+void EnumTerminalsMap::print() const{
+    printMap(Map);
 }
 
 void printMap(SymbolMapPtr Map){

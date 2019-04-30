@@ -54,6 +54,7 @@ public:
     EnumTerminalsMap(std::string fname);        // Constructor from a file
     ~EnumTerminalsMap();                        // Free any allocated memory
     void appendMapWithData(std::string fname);  // Read more data
+    void print() const;                         // Print the map
     size_t returnEnum(char c);                  // Integer value for a Symbol
     size_t getMapSize();                        // Get the max Symbol value
 private:
