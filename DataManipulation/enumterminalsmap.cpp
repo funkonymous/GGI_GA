@@ -15,6 +15,9 @@ size_t findInMap(SymbolMapPtr *Map, char c, bool add = DONTADD);       // Search
 
 using namespace std;
 
+EnumTerminalsMap::EnumTerminalsMap(){
+    ;
+}
 //Constructor
 EnumTerminalsMap::EnumTerminalsMap(std::string fname) : Map(NULL), MapSize(0)
 {

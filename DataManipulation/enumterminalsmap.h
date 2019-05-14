@@ -51,6 +51,7 @@
 class EnumTerminalsMap
 {
 public:
+    EnumTerminalsMap();                         // Dummy constructor
     EnumTerminalsMap(std::string fname);        // Constructor from a file
     ~EnumTerminalsMap();                        // Free any allocated memory
     void appendMapWithData(std::string fname);  // Read more data
