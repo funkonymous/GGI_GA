@@ -10,7 +10,7 @@
 #include "greibachsets.h"
 #include "algorithmvariables.h"
 #include "grammar.h"
-//#include "sgautilities.h"
+#include "sgautilities.h"
 #include "population.h"
 #include "geneticalgorithm.h"
 
@@ -30,10 +30,17 @@ using namespace std;
 // TODO LAVA github ~ live plots
 int main(int argc, char **argv)
 {
-    /* get options */
-    GeneticAlgorithm G(argc,argv);
-    /*
     srand(time(NULL));
+    /* get options */
+    ///*
+    printMemory();
+
+    ggi::GeneticAlgorithm *G = new ggi::GeneticAlgorithm(argc,argv);
+    delete G;
+
+    printMemory();//*/
+
+    /*
     //string f1("DataSets/dna_cds.dat");
     //string f1("DataSets/smalldata.dat");
     string f1("DataSets/names_txt.dat");
@@ -48,7 +55,7 @@ int main(int argc, char **argv)
 
     Population p(Vars);
     //printMemory();
-    //Population p(Vars);
+    //Population p(Vars);*/
 
     return 0; //*/
 }
