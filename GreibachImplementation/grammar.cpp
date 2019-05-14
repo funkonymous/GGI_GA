@@ -4,7 +4,7 @@
 GrammarCodonPtr createNonTerm(AlgorithmVariables &V);
 
 Grammar::Grammar(AlgorithmVariables &Vars)
-    : NumberOfRules(0), GenomeLength(0)
+    : NumberOfRules(0), GenomeLength(0), fitness(0.0)
 {
     size_t length = 0; // This variable will be returned by reference
     Rules = (GrammarCodonPtr*) malloc( Vars.getMaxNoRules()*sizeof(GrammarCodonPtr) ); // Pointers to rules
@@ -185,13 +185,27 @@ void Grammar::ruleBody(size_t Rule, GrammarCodonPtr *Start, GrammarCodonPtr *End
     *End = NULL;
 }
 
-bool Grammar::parse(DataWord &data, size_t &depth){
-    depth = data.size();
-    return parse(data,0,data.size(),0,depth);
+void Grammar::parse(DataWord &data, AlgorithmVariables &V, bool dataOrigin){
+    size_t depth = data.size();
+    if(dataOrigin==Positive){
+        if(parse(data,0,data.size(),0,depth)) fitness += V.getWeight(TP);
+        else fitness -= V.getWeight(FN)*((1-V.getSubparse()) - V.getSubparse()*depth);
+    }
+    else{
+        if(parse(data,0,data.size(),0,depth)) fitness -= V.getWeight(FP);
+        else fitness += V.getWeight(TN);
+    }
 }
 
-bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, size_t Head, size_t &depth){
+
+
+//*
+inline bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, size_t Head, size_t &depth){
     bool found = false;
+    if(wStart >= wEnd) {
+        depth = 0;
+        return false;
+    }
     if(wStart + 1 == wEnd){ // case that the word length = 1
         for(size_t i = 0; i < NumberOfRules; ++i){
             if( (ruleHead(i) == Head)&&(ruleTerminal(i) == w[wStart])&&(ruleLength(i) == 2) ){
@@ -203,12 +217,13 @@ bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, size_t Head, size_t
     else{
         GrammarCodonPtr BodyS, BodyE;
         for(size_t i = 0; i < NumberOfRules; ++i){
-            if( (ruleHead(i) == Head)&&(ruleTerminal(i) == w[0]) ){
+            if( (ruleHead(i) == Head)&&(ruleTerminal(i) == w[wStart]) ){
                 if( ruleLength(i) == 2 ) found = true;
                 else if (ruleLength(i) == 3){
                     ruleBody(i, &BodyS, &BodyE);
                     if(BodyS != NULL)
                         if(parse(w,wStart+1,wEnd,BodyS->Symbol,depth)) return true;
+                    //else return false;
                 }
                 else if (ruleLength(i) > 3){
                     if(wEnd-wStart >= ruleLength(i) - 2){ // a little smart prunning
@@ -225,14 +240,19 @@ bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, size_t Head, size_t
     return false;
 }
 
-bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, GrammarCodonPtr FirstHead, GrammarCodonPtr LastHead, size_t &depth){
+inline bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, GrammarCodonPtr FirstHead, GrammarCodonPtr LastHead, size_t &depth){
+    if(wStart>=wEnd){
+        depth = 0;
+        return false;
+    }
+    if(FirstHead == LastHead) return parse(w,wStart,wEnd,FirstHead->Symbol,depth);
     if(FirstHead->nextCodon == LastHead){ // 2 terminals
         size_t depth1,depth2;
         for(size_t i = wStart + 1; i < wEnd; ++i){
             depth1 = i - wStart;
             depth2 = wEnd - i;
-            if( parse(w,wStart,wStart+i,FirstHead->Symbol,depth1) &&
-                    parse(w,wStart+i,wEnd,LastHead->Symbol,depth2)){
+            if( parse(w,wStart,i,FirstHead->Symbol,depth1) &&
+                    parse(w,i,wEnd,LastHead->Symbol,depth2)){
                 depth = 0;
                 return true;
             }
@@ -242,8 +262,8 @@ bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, GrammarCodonPtr Fir
     else{ // more than two terminals
         size_t depth1,depth2;
         for(size_t i = wStart + 1; i < wEnd - 1; ++i){
-            if( parse(w,wStart,wStart+i,FirstHead->Symbol,depth1) &&
-                    parse(w,wStart+i,wEnd,FirstHead->nextCodon,LastHead,depth2)){
+            if( parse(w,wStart,i,FirstHead->Symbol,depth1) &&
+                    parse(w,i,wEnd,FirstHead->nextCodon,LastHead,depth2)){
                 depth = 0;
                 return true;
             }
@@ -252,7 +272,7 @@ bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, GrammarCodonPtr Fir
     }
     return false;
 }
-
+//*/
 GrammarCodonPtr createNonTerm(AlgorithmVariables &V){
     GrammarCodonPtr c = (GrammarCodonPtr) malloc( sizeof(GrammarCodonPtr) );
     c->Symbol = V.getNonTerm();
@@ -260,10 +280,14 @@ GrammarCodonPtr createNonTerm(AlgorithmVariables &V){
     c->nextCodon = NULL;
     return c;
 }
-
+/*
 GrammarCodonPtr Grammar::getGen(){
     return Genome;
-}
+}*/
 size_t Grammar::size(){
     return GenomeLength;
+}
+
+float Grammar::getFitness() const{
+    return fitness;
 }

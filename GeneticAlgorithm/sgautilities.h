@@ -12,7 +12,7 @@
 #include <sys/ioctl.h>
 
 
-void process_mem_usage(double& vm_usage, double& resident_set)
+inline void process_mem_usage(double& vm_usage, double& resident_set)
 {
     vm_usage     = 0.0;
     resident_set = 0.0;
@@ -31,7 +31,7 @@ void process_mem_usage(double& vm_usage, double& resident_set)
         resident_set = rss * page_size_kb;
 }
 
-void printMemory(){
+inline void printMemory(){
     double vm, rss;
     process_mem_usage(vm, rss);
     std::cout << "VM: " << vm/1024.0 << " Mbits; RSS: " << rss/1024.0 << " Mbits" << std::endl;

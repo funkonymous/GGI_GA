@@ -15,6 +15,8 @@
 // * in order to avoid redundant genotype-to-phenotype mappings during the runtime
 // * of the genetic algorithm.
 
+enum {Negative = 0, Positive = 1};
+
 class Grammar
 {
 public:
@@ -24,8 +26,11 @@ public:
     ~Grammar();                                 // Destructor -> Free any allocated memory
     void print() const;                         // Print the grammar rule by rule
     void printRule(size_t Rule) const;          // Print the rule [Rule]
-    bool parse(DataWord &data, size_t &depth);  // Check if the dataword [data] belongs in the grammar
-    GrammarCodonPtr getGen();                   // afta 8a svhstoun
+    void parse(DataWord &data,                  // Check if the dataword [data] belongs in the grammar
+               AlgorithmVariables &V,           // and update the fitness
+               bool dataOrigin);
+    float getFitness() const;                   // Return the fitness of the individual
+    //GrammarCodonPtr getGen();                   // afta 8a svhstoun
     size_t size();
 
 private:
@@ -48,9 +53,10 @@ private:
     void ruleBody(size_t Rule, GrammarCodonPtr *Start,
                   GrammarCodonPtr *End);      // Return the start and the end of the body through pointers
     // Parsing functions for the parsing tree
-    bool parse(DataWord &w, size_t wStart, size_t wEnd, size_t Head, size_t &depth);
-    bool parse(DataWord &w, size_t wStart, size_t wEnd, GrammarCodonPtr FirstHead,
+    inline bool parse(DataWord &w, size_t wStart, size_t wEnd, size_t Head, size_t &depth);
+    inline bool parse(DataWord &w, size_t wStart, size_t wEnd, GrammarCodonPtr FirstHead,
                GrammarCodonPtr LastHead, size_t &depth);
+    float fitness;                            // fitness of the individual
 };
 
 #endif // GRAMMAR_H
