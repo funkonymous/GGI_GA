@@ -31,8 +31,6 @@ using namespace std;
 int main(int argc, char **argv)
 {
     srand(time(NULL));
-    /* get options */
-    ///*
     printMemory();
 
     ggi::GeneticAlgorithm *G = new ggi::GeneticAlgorithm(argc,argv);
