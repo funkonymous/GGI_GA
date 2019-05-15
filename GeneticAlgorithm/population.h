@@ -9,7 +9,7 @@
 class Population
 {
 public:
-    Population(AlgorithmVariables Vars);  // explicit constructor
+    Population(AlgorithmVariables &Vars); // explicit constructor
     ~Population();                        // destructor
 
     void parse(DataBase &dat, AlgorithmVariables &V,

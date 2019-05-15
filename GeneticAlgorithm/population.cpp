@@ -4,7 +4,7 @@
 #include <exception>
 #include <algorithm>
 
-Population::Population(AlgorithmVariables Vars) : populationSize(Vars.getPoolSize())
+Population::Population(AlgorithmVariables &Vars) : populationSize(Vars.getPoolSize())
 {
     std::cout << "Initializing population" << std::endl;
     ez::ezETAProgressBar eta(populationSize);
