@@ -31,6 +31,8 @@ public:
     size_t getPoolSize() const;                // Get the number of individuals for each generation
     size_t getWeight(size_t index) const;      // Get the weight (TP,FN,FP,TN)
     float getSubparse() const;                 // Get the subparse variable
+    float getParentalPortion() const;          // Get the parental portion variable
+    float getElitismRate() const;              // Get the elitism rate
     // Set methods
     void setGNFsets(EnumTerminalsMap &M);      // This must be done during initialization
     void setMaxRuleLen(size_t length);         // Set the maximum length of rule

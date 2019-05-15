@@ -1,7 +1,8 @@
 #include "grammar.h"
 #include <iostream>
 
-GrammarCodonPtr createNonTerm(AlgorithmVariables &V);
+inline GrammarCodonPtr createNonTerm(AlgorithmVariables &V);
+inline GrammarCodonPtr copyNode(GrammarCodonPtr n);
 
 Grammar::Grammar(AlgorithmVariables &Vars)
     : NumberOfRules(0), GenomeLength(0), fitness(0.0)
@@ -35,6 +36,7 @@ Grammar::Grammar(GrammarCodonPtr G, size_t len) : NumberOfRules(0), GenomeLength
 {
     Genome = G;
     LastCodon = G;
+
     Rules = (GrammarCodonPtr*) malloc( len*sizeof(GrammarCodonPtr) ); // Pointers to rules
     RulesLen = (size_t *) malloc( (len/2)*sizeof(size_t) ); // Rules length (at most genomelength/2 rules
                                                             //                   due to GNF)
@@ -273,17 +275,43 @@ inline bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, GrammarCodon
     return false;
 }
 //*/
-GrammarCodonPtr createNonTerm(AlgorithmVariables &V){
+inline GrammarCodonPtr createNonTerm(AlgorithmVariables &V){
     GrammarCodonPtr c = (GrammarCodonPtr) malloc( sizeof(GrammarCodonPtr) );
     c->Symbol = V.getNonTerm();
     c->SetOrigin = NonTerminal;
     c->nextCodon = NULL;
     return c;
 }
-/*
-GrammarCodonPtr Grammar::getGen(){
-    return Genome;
-}*/
+
+inline GrammarCodonPtr copyNode(GrammarCodonPtr n){
+
+    GrammarCodonPtr newNode = (GrammarCodonPtr) malloc( sizeof(GrammarCodonPtr) );
+    newNode->Symbol = n->Symbol;
+    newNode->SetOrigin = n->SetOrigin;
+    newNode->nextCodon = NULL;
+    return newNode;
+}
+
+GrammarCodonPtr Grammar::copyGen(){
+
+    GrammarCodonPtr tempGenePointer = Genome;
+    GrammarCodonPtr tempListPointer;
+    tempListPointer = copyNode(Genome);
+    GrammarCodonPtr newGen = tempListPointer;
+    tempGenePointer = tempGenePointer->nextCodon;
+
+    while (tempGenePointer!=LastCodon){
+        tempListPointer->nextCodon = copyNode(tempGenePointer);
+        tempListPointer = tempListPointer->nextCodon;
+        //std::cout << tempGenePointer->Symbol << "|" << tempListPointer->Symbol << " -> " ;
+        tempGenePointer = tempGenePointer->nextCodon;
+    }
+
+    tempListPointer->nextCodon = copyNode(LastCodon);
+    //std::cout << tempGenePointer->Symbol << "|" << tempListPointer->Symbol << " -> " ;
+    return newGen;
+}
+
 size_t Grammar::size(){
     return GenomeLength;
 }

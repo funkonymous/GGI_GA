@@ -30,7 +30,7 @@ public:
                AlgorithmVariables &V,           // and update the fitness
                bool dataOrigin);
     float getFitness() const;                   // Return the fitness of the individual
-    //GrammarCodonPtr getGen();                   // afta 8a svhstoun
+    GrammarCodonPtr copyGen();                  // Make a copy of the genome
     size_t size();
 
 private:

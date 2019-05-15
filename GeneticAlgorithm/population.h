@@ -14,10 +14,14 @@ public:
 
     void parse(DataBase &dat, AlgorithmVariables &V,
                bool dataOrigin);          // Parse the whole population with this dataset
-    void sortPool();                      // Sort the individuals
+    void nextPool(AlgorithmVariables &V); // Derive the next generation
 private:
+    // Data members
     size_t populationSize;
-    Grammar **pool;    // This is a matrix of pointers to grammars
+    Grammar **pool;                           // This is a matrix of pointers to grammars
+    // private methods
+    void sortPool();                          // Sort the individuals
+    size_t getTicket(AlgorithmVariables &V);  // Ticket for crossover probability estimation
 };
 
 #endif // POPULATION_H

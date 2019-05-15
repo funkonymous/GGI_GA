@@ -45,5 +45,33 @@ void Population::sortPool(){
     //*
     std::sort(pool, pool + populationSize,
               [](Grammar const * a, Grammar const * b) -> bool
-              { return a->getFitness() >= b->getFitness(); } ); //*/
+              { return a->getFitness() >= b->getFitness(); } ); //*/ lambda expression
+}
+
+void Population::nextPool(AlgorithmVariables &V){
+    Grammar **newPool; // the next generation
+    newPool = new Grammar*[populationSize];
+    sortPool();
+
+    // Elitism migration
+    for(size_t i = 0; i<V.getElitismRate()*populationSize; ++i){
+        newPool[i] = new Grammar(pool[i]->copyGen(),pool[i]->size());
+    }
+
+}
+
+size_t Population::getTicket(AlgorithmVariables &V){
+    size_t tickets = 0;
+    size_t i;
+    for(i = 0; i < (int) (V.getParentalPortion()*populationSize); ++i ){
+        tickets += pool[i]->getFitness() -
+                pool[(int) (V.getParentalPortion()*populationSize)-1]->getFitness();
+    }
+    size_t ticket = rand()%tickets;
+    for(i = 0; i < (int) (V.getParentalPortion()*populationSize); ++i ){
+        ticket -= pool[i]->getFitness() -
+                pool[(int) (V.getParentalPortion()*populationSize)-1]->getFitness();
+        if(ticket < 0) break;
+    }
+    return i;
 }

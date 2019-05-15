@@ -124,6 +124,14 @@ float AlgorithmVariables::getSubparse() const{
     return subParse;
 }
 
+float AlgorithmVariables::getParentalPortion() const{
+    return ParentalPortion;
+}
+
+float AlgorithmVariables::getElitismRate() const{
+    return elitism;
+}
+
 void AlgorithmVariables::print() const{
     std::cout << " ~ Greibach grammatical inference algorithm running with variables ~" << std::endl;
     std::cout << "   -> Genetic algorithm variables : " << std::endl;

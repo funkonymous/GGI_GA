@@ -24,6 +24,7 @@ private:
     Population* Pool;                           // Population
     // private genetic algorithm methods
     void iterate();                             // Run an iteration of the algorithm
+    size_t getTicket(float perc);               // Get tickets for the crossover (perc = parental portion)
 };
 
 }

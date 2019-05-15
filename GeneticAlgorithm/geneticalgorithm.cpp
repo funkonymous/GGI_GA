@@ -207,8 +207,9 @@ void GeneticAlgorithm::iterate(){
     Pool->parse(*PositiveData,*Vars,Positive);
     std::cout << "Negative data parsing : " << std::endl;
     Pool->parse(*NegativeData,*Vars,Negative);
-    Pool->sortPool();
+    Pool->nextPool(*Vars);
 }
+
 
 }
 /* Print the program help */
