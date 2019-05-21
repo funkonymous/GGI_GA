@@ -21,12 +21,11 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/GeneticAlgorithm
   ${PROJECT_SOURCE_DIR}/GreibachImplementation
   ${PROJECT_SOURCE_DIR}/DataManipulation
-  ${PROJECT_SOURCE_DIR}/DataSets
 )
 
 #add_library(ggi ${GGI_ACCEL_SOURCE_FILES})
 
-file(COPY DataSets DESTINATION bin)
+#file(COPY DataSets DESTINATION bin)
 ###############################################################################
 #
 add_executable(GGI_ACCEL
