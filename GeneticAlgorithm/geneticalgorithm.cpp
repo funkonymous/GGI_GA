@@ -8,6 +8,7 @@
 #include <string>
 #include <fstream>
 #include <algorithm>
+#include "matplotlibcpp.h"
 
 #include "sgautilities.h"
 
@@ -19,7 +20,7 @@ inline bool checkfile(const std::string name);
 namespace ggi {
 
 
-GeneticAlgorithm::GeneticAlgorithm(int argc, char **argv)
+GeneticAlgorithm::GeneticAlgorithm(int argc, char **argv) : iterations(0)
 {
     Vars = new AlgorithmVariables();
     //std::cout << argc << std::endl;
@@ -98,8 +99,8 @@ GeneticAlgorithm::GeneticAlgorithm(int argc, char **argv)
                 break;
             case 'R' :
                 std::cout << "Configuring input argument : -R = " << optarg << std::endl;
-                if(atoi(optarg) < 1){
-                    std::cout << "A grammar must have rules! Program terminated" << std::endl;
+                if(atoi(optarg) < 2){
+                    std::cout << "A grammar must have at least 2 rules! Program terminated" << std::endl;
                     exit(1);
                 }
                 Vars->setMaxNofRules(atoi(optarg));
@@ -187,11 +188,13 @@ GeneticAlgorithm::GeneticAlgorithm(int argc, char **argv)
     NegativeData = new DataBase(NegData,*Map);
 
     Vars->calculateConvFitness(PositiveData->size(),NegativeData->size());
-    Vars->print();
 
     Pool = new Population(*Vars);
 
-    iterate();
+    bestFit.reserve(Vars->getMaxGens());
+    elitFit.reserve(Vars->getMaxGens());
+
+    Vars->print();
 }
 
 GeneticAlgorithm::~GeneticAlgorithm(){
@@ -203,13 +206,31 @@ GeneticAlgorithm::~GeneticAlgorithm(){
 }
 
 void GeneticAlgorithm::iterate(){
-    std::cout << "Positive data parsing : " << std::endl;
+    std::cout << "Positive data parsing..." << std::endl;
     Pool->parse(*PositiveData,*Vars,Positive);
-    std::cout << "Negative data parsing : " << std::endl;
+    std::cout << "Negative data parsing..." << std::endl;
     Pool->parse(*NegativeData,*Vars,Negative);
     Pool->nextPool(*Vars);
+    bestFit.push_back(Pool->getBestFit());
+    elitFit.push_back(Pool->getElitFit());
+    ++iterations;
+    matplotlibcpp::clf();
+    matplotlibcpp::named_plot("Best fitness",bestFit);
+    matplotlibcpp::named_plot("Average elite fitness",elitFit);
+    matplotlibcpp::grid(true);
+    matplotlibcpp::xlim(0, (int) iterations);
+    matplotlibcpp::ylim(0, (int) (Vars->getMaxFit() * 1.3));
+    matplotlibcpp::title("Algorithm runtime results");
+    matplotlibcpp::legend();
+    matplotlibcpp::pause(0.001);
 }
 
+void GeneticAlgorithm::run(){
+    do{
+        iterate();
+        Pool->printBestFit();
+    }while( Pool->getBestFit() < Vars->getMaxFit() && iterations < Vars->getMaxGens());
+}
 
 }
 /* Print the program help */
@@ -226,7 +247,7 @@ void print_usage()
                  "\t-t Define the rate of individuals that can be selected as parents (Default 0.85)" << "\n" <<
                  "\t-e Define the elitism rate (Default 0.03)" << "\n" <<
                  "\t-r Define the maximum rule length in the initial population (Default 5)" << "\n" <<
-                 "\t-R Define the maximum number of rules in the initial population (Default 50)" << "\n" <<
+                 "\t-R Define the maximum number of rules in the initial population (Default 50, at least 2)" << "\n" <<
                  "\t-l Define the max genome length for all gens (Default Max rule length * Max number of rules)" << "\n" <<
                  "\t-s Define the subparse variable (Default 0.01)" << "\n" <<
                  "\t-c Define the confusion matrix (Default \"1.0 1.0 1.0 1.0\")" << "\n" <<

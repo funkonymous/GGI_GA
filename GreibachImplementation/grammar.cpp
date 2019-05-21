@@ -1,5 +1,6 @@
 #include "grammar.h"
 #include <iostream>
+#include <math.h>
 
 inline GrammarCodonPtr createNonTerm(AlgorithmVariables &V);
 inline GrammarCodonPtr copyNode(GrammarCodonPtr n);
@@ -21,44 +22,41 @@ Grammar::Grammar(AlgorithmVariables &Vars)
 
     // Generate the rest of the rules
     for(size_t i = 0; i < Vars.getMaxNoRules()-1; ++i){
-        if(!(rand()%(Vars.getMaxNoRules()-i))) break;                  // equal probability to break for every number of rules
+
         CurrLastPtr->nextCodon = generateRule(Vars,&LastCodon,length); // generate rule
         Rules[NumberOfRules] = CurrLastPtr->nextCodon;                 // Update rules pointer
         RulesLen[NumberOfRules] = length;                              // Update length of each rule
         CurrLastPtr = LastCodon;                                       // Update Last Symbol Pointer
         GenomeLength += length;                                        // | Update counters
         NumberOfRules++;                                               // |
+        if(!(rand()%(Vars.getMaxNoRules()-i))) break;                  // equal probability to break for every number of rules
+
     }
 
 }
 
-Grammar::Grammar(GrammarCodonPtr G, size_t len) : NumberOfRules(0), GenomeLength(len)
+Grammar::Grammar(GrammarCodonPtr G, size_t len) : NumberOfRules(0), GenomeLength(len), fitness(0.0)
 {
     Genome = G;
     LastCodon = G;
 
-    Rules = (GrammarCodonPtr*) malloc( len*sizeof(GrammarCodonPtr) ); // Pointers to rules
-    RulesLen = (size_t *) malloc( (len/2)*sizeof(size_t) ); // Rules length (at most genomelength/2 rules
-                                                            //                   due to GNF)
-    GrammarCodonPtr previousCodon = LastCodon;
+    Rules = (GrammarCodonPtr*) malloc( ceil(len/2.0)*sizeof(GrammarCodonPtr) ); // Pointers to rules
+    RulesLen = (size_t *) malloc( ceil(len/2.0)*sizeof(size_t) );
+
     size_t ruleL = 0;
-    for(size_t i = 0; i < GenomeLength; ++i){
-        ruleL++;
-        if(GenomeLength-i > 1){
-            if(LastCodon->nextCodon->SetOrigin == Terminal){
-                ruleL++;
-                Rules[NumberOfRules] = LastCodon;
-                RulesLen[NumberOfRules] = ruleL;
-                NumberOfRules++;
+    for(size_t i = 0; i < GenomeLength-1;++i){
+        if(LastCodon->nextCodon->SetOrigin==Terminal){
+            Rules[NumberOfRules] = LastCodon;
+            if(NumberOfRules>0){
+                RulesLen[NumberOfRules-1] = ruleL;
                 ruleL = 0;
             }
-        }
-        else{
-            ruleL++;
+            NumberOfRules++;
         }
         LastCodon = LastCodon->nextCodon;
+        ruleL++;
     }
-    RulesLen[NumberOfRules] = ruleL;
+    RulesLen[NumberOfRules-1] = ruleL+1;
 }
 
 Grammar::~Grammar(){
@@ -79,12 +77,12 @@ Grammar::~Grammar(){
 GrammarCodonPtr Grammar::generateRule(AlgorithmVariables &V, GrammarCodonPtr *LastC, size_t &Len){
     // The two first symbols are explicitely written in order to preserve the GNF of the rules
     // Terminal symbol of the GNF rule
-    GrammarCodonPtr Term = (GrammarCodonPtr) malloc( sizeof(GrammarCodonPtr) );
+    GrammarCodonPtr Term = (GrammarCodonPtr) malloc( sizeof(GrammarCodon) );
     Term->Symbol = V.getTerm();
     Term->SetOrigin = Terminal;
     Term->nextCodon = NULL;
     // Head of the rule
-    GrammarCodonPtr Head = (GrammarCodonPtr) malloc( sizeof(GrammarCodonPtr) );
+    GrammarCodonPtr Head = (GrammarCodonPtr) malloc( sizeof(GrammarCodon) );
     Head->Symbol = V.getNonTerm();
     Head->SetOrigin = NonTerminal;
     Head->nextCodon = Term;
@@ -122,7 +120,7 @@ void Grammar::printRule(size_t Rule) const{
             currPtr = currPtr->nextCodon;
             std::cout << currPtr->Symbol << " ";
         }
-        std::cout << std::endl;
+        std::cout << "  " << RulesLen[Rule] << std::endl;
         return;
     }
     else if(Rule < NumberOfRules - 1){ // print a random rule
@@ -132,7 +130,7 @@ void Grammar::printRule(size_t Rule) const{
             currPtr = currPtr->nextCodon;
             std::cout << currPtr->Symbol << " ";
         }
-        std::cout << std::endl;
+        std::cout << "  " << RulesLen[Rule] << std::endl;
         return;
     }
 }
@@ -191,7 +189,7 @@ void Grammar::parse(DataWord &data, AlgorithmVariables &V, bool dataOrigin){
     size_t depth = data.size();
     if(dataOrigin==Positive){
         if(parse(data,0,data.size(),0,depth)) fitness += V.getWeight(TP);
-        else fitness -= V.getWeight(FN)*((1-V.getSubparse()) - V.getSubparse()*depth);
+        else fitness -= V.getWeight(FN)*((1.0 - V.getSubparse()*((float)depth/(float)data.size()+1)));
     }
     else{
         if(parse(data,0,data.size(),0,depth)) fitness -= V.getWeight(FP);
@@ -238,7 +236,7 @@ inline bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, size_t Head,
             }
         }
     }
-    if(found && depth>0) depth--;
+    //if(found && depth>0) depth--;
     return false;
 }
 
@@ -262,8 +260,10 @@ inline bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, GrammarCodon
         }
     }
     else{ // more than two terminals
-        size_t depth1,depth2;
+        size_t depth1 = depth,depth2 = depth;
         for(size_t i = wStart + 1; i < wEnd - 1; ++i){
+            depth1 = depth;
+            depth2 = depth;
             if( parse(w,wStart,i,FirstHead->Symbol,depth1) &&
                     parse(w,i,wEnd,FirstHead->nextCodon,LastHead,depth2)){
                 depth = 0;
@@ -276,7 +276,7 @@ inline bool Grammar::parse(DataWord &w, size_t wStart, size_t wEnd, GrammarCodon
 }
 //*/
 inline GrammarCodonPtr createNonTerm(AlgorithmVariables &V){
-    GrammarCodonPtr c = (GrammarCodonPtr) malloc( sizeof(GrammarCodonPtr) );
+    GrammarCodonPtr c = (GrammarCodonPtr) malloc( sizeof(GrammarCodon) );
     c->Symbol = V.getNonTerm();
     c->SetOrigin = NonTerminal;
     c->nextCodon = NULL;
@@ -285,7 +285,7 @@ inline GrammarCodonPtr createNonTerm(AlgorithmVariables &V){
 
 inline GrammarCodonPtr copyNode(GrammarCodonPtr n){
 
-    GrammarCodonPtr newNode = (GrammarCodonPtr) malloc( sizeof(GrammarCodonPtr) );
+    GrammarCodonPtr newNode = (GrammarCodonPtr) malloc( sizeof(GrammarCodon) );
     newNode->Symbol = n->Symbol;
     newNode->SetOrigin = n->SetOrigin;
     newNode->nextCodon = NULL;
@@ -312,8 +312,89 @@ GrammarCodonPtr Grammar::copyGen(){
     return newGen;
 }
 
+GrammarCodonPtr Grammar::copyTo(size_t index){
+    GrammarCodonPtr partialGen;
+    GrammarCodonPtr tempGenePointer = Genome;
+    GrammarCodonPtr tempListPointer;
+    partialGen = copyNode(tempGenePointer);
+    tempListPointer = partialGen;
+    tempGenePointer = tempGenePointer->nextCodon;
+    for(size_t i = 1; i<index;++i){
+        tempListPointer->nextCodon = copyNode(tempGenePointer);
+        tempListPointer = tempListPointer->nextCodon;
+        tempGenePointer = tempGenePointer->nextCodon;
+    }
+    return partialGen;
+}
+
+GrammarCodonPtr Grammar::copyFrom(size_t index){
+    GrammarCodonPtr partialGen;
+    GrammarCodonPtr tempGenePointer = Genome;
+    GrammarCodonPtr tempListPointer;
+    for(size_t i = 0; i<index; ++i){
+        tempGenePointer = tempGenePointer->nextCodon;
+    }
+    partialGen = copyNode(tempGenePointer);
+    tempListPointer = partialGen;
+    tempGenePointer = tempGenePointer->nextCodon;
+    for(size_t i = index+1; i<GenomeLength;++i){
+        tempListPointer->nextCodon = copyNode(tempGenePointer);
+        tempListPointer = tempListPointer->nextCodon;
+        tempGenePointer = tempGenePointer->nextCodon;
+    }
+    return partialGen;
+}
+
 size_t Grammar::size(){
     return GenomeLength;
+}
+
+size_t Grammar::setOrigin(size_t offset){
+    GrammarCodonPtr temp = Genome;
+    for(size_t i = 0; i<offset; ++i){
+        temp = temp->nextCodon;
+    }
+    return temp->SetOrigin;
+}
+
+bool Grammar::validGNF(AlgorithmVariables &V,bool strictness){
+    bool StartingSymbolFound = false;
+    bool SmallRule = false;
+    bool rulesLengths = true;
+    GrammarCodonPtr tempPtr = Genome;
+    for(size_t i = 0; i < GenomeLength-1;++i){
+        if(tempPtr->Symbol==0 && tempPtr->nextCodon->SetOrigin == Terminal){
+            StartingSymbolFound = true;
+            break;
+        }
+    }
+    for(size_t i = 0; i<NumberOfRules;++i){
+        if(RulesLen[i]==2){
+            SmallRule = true;
+            break;
+        }
+    }
+    if(strictness = Strict);
+        for(size_t i = 0; i<NumberOfRules;++i){
+            if(RulesLen[i]>V.getMaxRuleLen()){
+                rulesLengths = false;
+                break;
+            }
+    }
+    if(SmallRule && StartingSymbolFound && rulesLengths && NumberOfRules > 1) return true;
+    else return false;
+}
+
+void Grammar::mutate(AlgorithmVariables &V){
+    size_t index = rand()%(GenomeLength);
+    GrammarCodonPtr tempPtr = Genome;
+    for(size_t i = 0;i<index;++i){
+        tempPtr = tempPtr->nextCodon;
+    }
+    if(tempPtr!=NULL){
+        if(tempPtr->SetOrigin == Terminal) tempPtr->Symbol = V.getTerm();
+        else tempPtr->Symbol = V.getNonTerm();
+    }
 }
 
 float Grammar::getFitness() const{

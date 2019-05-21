@@ -27,7 +27,7 @@ EnumTerminalsMap::EnumTerminalsMap(std::string fname) : Map(NULL), MapSize(0)
     if(infile.is_open()){
         std::cout << "Reading file : " << fname << std::endl;
         while(getline(infile,line)){
-            for(size_t i = 0;i<line.size()-1;++i){
+            for(size_t i = 0;i<line.size();++i){
                 if(!findInMap(&Map,line[i],ADD)){             // search symbol and ADD if found
                     MapSize++;                                // else create new integer and
                     insertMappedSymbol(&Map,line[i],MapSize); // append the enumeration map

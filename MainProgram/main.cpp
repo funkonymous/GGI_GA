@@ -17,23 +17,19 @@
 
 using namespace std;
 
-
-// Seira ekteleshs
-// 1. Enumeration map
-// 2. Datasets
-// 3. Set algorithm variables
-//    - Greibach sets is the only without defaults
-// 4. Initialize population
-// 5. SGA
-
-// TODO command line arguments ~ getopt()
+// TODO 1) getTickets not crashing, 2) validGNFs, 3) mutation
 // TODO LAVA github ~ live plots
+
+// Na ftiaksw to crossover !!! (Nomizw to eftiaksa)
+// Na grapsw to mutation
+
 int main(int argc, char **argv)
 {
     srand(time(NULL));
     printMemory();
 
     ggi::GeneticAlgorithm *G = new ggi::GeneticAlgorithm(argc,argv);
+    G->run();
     delete G;
 
     printMemory();//*/

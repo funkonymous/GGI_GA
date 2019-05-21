@@ -16,6 +16,7 @@
 // * of the genetic algorithm.
 
 enum {Negative = 0, Positive = 1};
+enum {Strict = 0, Unristricted = 1};
 
 class Grammar
 {
@@ -31,7 +32,17 @@ public:
                bool dataOrigin);
     float getFitness() const;                   // Return the fitness of the individual
     GrammarCodonPtr copyGen();                  // Make a copy of the genome
-    size_t size();
+    size_t size();                              // Length of the genome
+    // crossover functions
+    GrammarCodonPtr copyTo(size_t index);       // Copy genome [0,index)
+    GrammarCodonPtr copyFrom(size_t index);     // Copy genome [index,end)
+    size_t setOrigin(size_t offset);            // Terminal or Non-terminal in offset
+    // Mutation
+    void mutate(AlgorithmVariables &V);         // Replace a random symbol
+    // Invalid GNFs checkink
+    bool validGNF(AlgorithmVariables &V,        // If the GNF has: 1) Symbol 0 in the head of a rule
+            bool strictness = Unristricted);    //                 2) At least two rules 3) At least 1 rule : RuleLen=2
+                                                //                 4) All rules length <= maxRuleLen
 
 private:
     // Pointers to the grammar

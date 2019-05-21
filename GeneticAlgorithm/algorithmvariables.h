@@ -29,10 +29,14 @@ public:
     size_t getMaxRuleLen() const;              // Get the maximum size of a rule in a GNF
     size_t getMaxNoRules() const;              // Get the maximum number of rules in a GNF
     size_t getPoolSize() const;                // Get the number of individuals for each generation
-    size_t getWeight(size_t index) const;      // Get the weight (TP,FN,FP,TN)
+    float getWeight(size_t index) const;       // Get the weight (TP,FN,FP,TN)
     float getSubparse() const;                 // Get the subparse variable
     float getParentalPortion() const;          // Get the parental portion variable
     float getElitismRate() const;              // Get the elitism rate
+    size_t getMaxGenomeLength() const;         // Get the max genome length
+    float getMutationRate() const;             // Get the mutation rate
+    size_t getMaxGens() const;                 // Maximum generations
+    float getMaxFit() const;                   // Maximum fitness before convergence
     // Set methods
     void setGNFsets(EnumTerminalsMap &M);      // This must be done during initialization
     void setMaxRuleLen(size_t length);         // Set the maximum length of rule

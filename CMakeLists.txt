@@ -7,6 +7,7 @@ project (GreibachCrammaticalInferenceAccelerated)
 # for rdm
 #set(CMAKE_EXPORT_COMPILE_COMMANDS=1)
 
+#sudo apt-get install python-matplotlib python-numpy python2.7-dev
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -o3")
 
@@ -52,7 +53,13 @@ add_executable(GGI_ACCEL
     GeneticAlgorithm/sgautilities.h
     GeneticAlgorithm/geneticalgorithm.h
     GeneticAlgorithm/geneticalgorithm.cpp
+    GeneticAlgorithm/matplotlibcpp.h
 )
+
+
+find_package(PythonLibs 2.7)
+target_include_directories(GGI_ACCEL PRIVATE ${PYTHON_INCLUDE_DIRS})
+target_link_libraries(GGI_ACCEL ${PYTHON_LIBRARIES})
 
 
 # Xcode and Visual working directories
@@ -67,7 +74,7 @@ add_executable(GGI_ACCEL
 
 ###############################################################################
 
-SOURCE_GROUP(datasets REGULAR_EXPRESSION ".*/.dat$" )
+#SOURCE_GROUP(datasets REGULAR_EXPRESSION ".*/.dat$" )
 
 ###############################################################################
 

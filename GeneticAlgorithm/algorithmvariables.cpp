@@ -100,7 +100,7 @@ void AlgorithmVariables::calculateConvFitness(size_t pos, size_t neg){
     absConvFitness = terminationFitness * (pos * getWeight(TP) + neg * getWeight(TN));
 }
 
-size_t AlgorithmVariables::getWeight(size_t index) const{
+float AlgorithmVariables::getWeight(size_t index) const{
     switch(index){
         case TP :
             return weightsMatrix[0][0];
@@ -130,6 +130,22 @@ float AlgorithmVariables::getParentalPortion() const{
 
 float AlgorithmVariables::getElitismRate() const{
     return elitism;
+}
+
+size_t AlgorithmVariables::getMaxGenomeLength() const{
+    return maxGenomeLength;
+}
+
+float AlgorithmVariables::getMutationRate() const{
+    return mutationRate;
+}
+
+size_t AlgorithmVariables::getMaxGens() const{
+    return maxGens;
+}
+
+float AlgorithmVariables::getMaxFit() const{
+    return absConvFitness;
 }
 
 void AlgorithmVariables::print() const{

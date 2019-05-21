@@ -5,7 +5,7 @@
 
 
 //Constructor
-DataWord::DataWord(std::string w,EnumTerminalsMap &m) : wordLength(w.size()-1)
+DataWord::DataWord(std::string w,EnumTerminalsMap &m) : wordLength(w.size())
 {
     word = (size_t *) malloc(wordLength*sizeof(size_t));              // allocate needed memory
     for(size_t i = 0;i<wordLength;++i) word[i] = m.returnEnum(w[i]);  // save enumerated word in
@@ -22,7 +22,7 @@ size_t DataWord::operator[](size_t n){
     if(n >= wordLength){                                                  // index out of bounds
         std::cout << "DataWord index out of bounds. Operator Word[n] " << // exception handling
                      "ignored and returned zero instead!!" << std::endl;
-        getchar();
+        //getchar();
         return 0;
     }
     return word[n];
