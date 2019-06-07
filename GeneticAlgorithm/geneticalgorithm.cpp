@@ -198,6 +198,15 @@ GeneticAlgorithm::GeneticAlgorithm(int argc, char **argv) : iterations(0)
 }
 
 GeneticAlgorithm::~GeneticAlgorithm(){
+    matplotlibcpp::clf();
+    matplotlibcpp::named_plot("Best fitness",bestFit);
+    matplotlibcpp::named_plot("Average elite fitness",elitFit);
+    matplotlibcpp::grid(true);
+    matplotlibcpp::xlim(0, (int) iterations);
+    matplotlibcpp::ylim(NegativeData->size()-PositiveData->size() - 1, (int) (Vars->getMaxFit() * 1.2));
+    matplotlibcpp::title("Algorithm runtime results");
+    matplotlibcpp::legend();
+    matplotlibcpp::save((Vars->ImageName()).c_str());
     delete Vars;
     delete Map;
     delete PositiveData;
@@ -214,15 +223,16 @@ void GeneticAlgorithm::iterate(){
     bestFit.push_back(Pool->getBestFit());
     elitFit.push_back(Pool->getElitFit());
     ++iterations;
+    //*
     matplotlibcpp::clf();
     matplotlibcpp::named_plot("Best fitness",bestFit);
     matplotlibcpp::named_plot("Average elite fitness",elitFit);
     matplotlibcpp::grid(true);
     matplotlibcpp::xlim(0, (int) iterations);
-    matplotlibcpp::ylim(0, (int) (Vars->getMaxFit() * 1.3));
+    matplotlibcpp::ylim(NegativeData->size()-PositiveData->size() - 1, (int) (Vars->getMaxFit() * 1.2));
     matplotlibcpp::title("Algorithm runtime results");
     matplotlibcpp::legend();
-    matplotlibcpp::pause(0.001);
+    matplotlibcpp::pause(0.001);//*/
 }
 
 void GeneticAlgorithm::run(){

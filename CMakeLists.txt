@@ -9,7 +9,9 @@ project (GreibachCrammaticalInferenceAccelerated)
 
 #sudo apt-get install python-matplotlib python-numpy python2.7-dev
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -o3")
+SET(CMAKE_CXX_COMPILER /opt/pgi/linux86-64/19.4/bin/pgc++)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -o4 -Mconcur=allcores -mp")
 
 set(EXECUTABLE_OUTPUT_PATH bin)
 

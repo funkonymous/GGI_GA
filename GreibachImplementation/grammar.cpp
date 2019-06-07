@@ -319,7 +319,7 @@ GrammarCodonPtr Grammar::copyTo(size_t index){
     partialGen = copyNode(tempGenePointer);
     tempListPointer = partialGen;
     tempGenePointer = tempGenePointer->nextCodon;
-    for(size_t i = 1; i<index;++i){
+    for(size_t i = 1; i<=index;++i){
         tempListPointer->nextCodon = copyNode(tempGenePointer);
         tempListPointer = tempListPointer->nextCodon;
         tempGenePointer = tempGenePointer->nextCodon;
@@ -381,6 +381,15 @@ bool Grammar::validGNF(AlgorithmVariables &V,bool strictness){
                 break;
             }
     }
+    /*
+    for(size_t i = 0; i<NumberOfRules;++i){
+        if(RulesLen[i]<=1){
+            this->print();
+            getchar();
+            rulesLengths = false;
+            break;
+        }
+    }//*/
     if(SmallRule && StartingSymbolFound && rulesLengths && NumberOfRules > 1) return true;
     else return false;
 }
@@ -395,6 +404,10 @@ void Grammar::mutate(AlgorithmVariables &V){
         if(tempPtr->SetOrigin == Terminal) tempPtr->Symbol = V.getTerm();
         else tempPtr->Symbol = V.getNonTerm();
     }
+}
+
+float Grammar::setFitness(float f){
+    fitness = f;
 }
 
 float Grammar::getFitness() const{

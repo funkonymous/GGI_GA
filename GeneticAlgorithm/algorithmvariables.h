@@ -37,6 +37,8 @@ public:
     float getMutationRate() const;             // Get the mutation rate
     size_t getMaxGens() const;                 // Maximum generations
     float getMaxFit() const;                   // Maximum fitness before convergence
+    std::string ImageName() const;             // Get the name to save the image
+    bool getFirstParse() const;
     // Set methods
     void setGNFsets(EnumTerminalsMap &M);      // This must be done during initialization
     void setMaxRuleLen(size_t length);         // Set the maximum length of rule
@@ -56,6 +58,7 @@ public:
     void setLogImage(std::string plot);        // Set the plotted images name
     void calculateConvFitness(size_t pos,
                               size_t neg);     // Calculate the absolute convergence fitness
+    void setFirstParse();                      // Say that the first parse was done
     // Print method
     void print() const;                        // Print the current state of the algorithm's variables
 private:
@@ -65,6 +68,7 @@ private:
     float ParentalPortion = 0.85;   // Natural selection percentage
     float elitism = 0.03;           // Percentage of individuals kept for next pool
     size_t maxGenomeLength = 250;   // Maximum genome length for each individual
+    bool firstParse = false;        // If the first iteration of tha algorithm is done for accelerating purposes
     // Termination criterions
     size_t maxGens = 500;           // Maximum number of generations
     float terminationFitness = 0.9; // Accepted convergence fitness out of 1

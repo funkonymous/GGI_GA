@@ -40,6 +40,14 @@ size_t AlgorithmVariables::getPoolSize() const{
     return poolSize;
 }
 
+bool AlgorithmVariables::getFirstParse() const{
+    return firstParse;
+}
+
+void AlgorithmVariables::setFirstParse(){
+    firstParse = true;
+}
+
 void AlgorithmVariables::setPoolSize(size_t size){
     poolSize = size;
 }
@@ -146,6 +154,10 @@ size_t AlgorithmVariables::getMaxGens() const{
 
 float AlgorithmVariables::getMaxFit() const{
     return absConvFitness;
+}
+
+std::string AlgorithmVariables::ImageName() const{
+    return logimage;
 }
 
 void AlgorithmVariables::print() const{

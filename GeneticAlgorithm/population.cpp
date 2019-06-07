@@ -3,6 +3,7 @@
 #include "sgautilities.h"
 #include <exception>
 #include <algorithm>
+#include <omp.h>
 
 Population::Population(AlgorithmVariables &Vars) : populationSize(Vars.getPoolSize()), bestFit(0.0), elitFit(0.0)
 {
@@ -35,17 +36,24 @@ Population::~Population(){
 }
 
 void Population::parse(DataBase &dat, AlgorithmVariables &V, bool dataOrigin){
-    ez::ezETAProgressBar eta((populationSize)*dat.size());
-    eta.start();
-    for(size_t i = 0; i < populationSize; ++i){
+    int startPosition = 0;
+    startPosition = V.getFirstParse() ? ((int) (V.getElitismRate()*populationSize)) : 0;
+    V.setFirstParse();
+#pragma omp parallel
+{
+    for(size_t i = startPosition; i < populationSize; ++i){
         for(size_t j = 0; j < dat.size(); ++j){
+#pragma omp single
+{
             pool[i]->parse(dat[j],V,dataOrigin);
-            ++eta;
+            //++eta;
+
+}
         }
     }
-    std::cout << "\e[A\r                                                     " <<
-                 "             \r";   // erase console output
 }
+}
+
 
 void Population::sortPool(){
     //*
@@ -68,6 +76,7 @@ void Population::nextPool(AlgorithmVariables &V){
     for(size_t i = 0; i< (int) (V.getElitismRate()*populationSize); ++i){
         added+=pool[i]->getFitness();
         newPool[i] = new Grammar(pool[i]->copyGen(),pool[i]->size());
+        newPool[i]->setFitness(pool[i]->getFitness());
     }
     elitFit = added / ( V.getElitismRate()* (float) populationSize);
     if(V.getElitismRate()*populationSize>1.0){
@@ -81,7 +90,7 @@ void Population::nextPool(AlgorithmVariables &V){
             newIndividual = crossover(pool[getTicket(V)],pool[getTicket(V)],V,s);
         }while (newIndividual==NULL) ;
         newPool[i] = new Grammar(newIndividual,s);
-        while (newPool[i]->validGNF(V,Strict)==false) {
+        while (newPool[i]->validGNF(V,Unristricted)==false) {
             delete newPool[i];
             do{
                 newIndividual = crossover(pool[getTicket(V)],pool[getTicket(V)],V,s);
@@ -95,8 +104,10 @@ void Population::nextPool(AlgorithmVariables &V){
 
     for(size_t i = 0; i<populationSize;++i){
         delete pool[i];
-        pool[i] = new Grammar(newPool[i]->copyGen(),newPool[i]->size());
-        delete newPool[i];
+        pool[i] = newPool[i];
+        //pool[i] = new Grammar(newPool[i]->copyGen(),newPool[i]->size());
+        if(i < (int) (V.getElitismRate()*populationSize)) pool[i]->setFitness(newPool[i]->getFitness());
+        //delete newPool[i];
     }
 
 }
