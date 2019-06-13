@@ -1,13 +1,13 @@
 #ifndef DATAUTILITIES_H
 #define DATAUTILITIES_H
-
+#include <string.h>
 
 //+-------------- EnumTerminals Map Utilities ----------------------+
 // The building block of the enumeration map.
 // See enumterminals.h for more info.
 struct symbolMap{
     size_t value;
-    char letter;
+    std::string letter;
     size_t timesFound;
     struct symbolMap *nextSymbol;
 };

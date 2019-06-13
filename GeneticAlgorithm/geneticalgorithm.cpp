@@ -203,7 +203,7 @@ GeneticAlgorithm::~GeneticAlgorithm(){
     matplotlibcpp::named_plot("Average elite fitness",elitFit);
     matplotlibcpp::grid(true);
     matplotlibcpp::xlim(0, (int) iterations);
-    matplotlibcpp::ylim(NegativeData->size()-PositiveData->size() - 1, (int) (Vars->getMaxFit() * 1.2));
+    matplotlibcpp::ylim((int) (NegativeData->size()-PositiveData->size() - 1), (int) (Vars->getMaxFit() * 1.2));
     matplotlibcpp::title("Algorithm runtime results");
     matplotlibcpp::legend();
     matplotlibcpp::save((Vars->ImageName()).c_str());
@@ -229,7 +229,7 @@ void GeneticAlgorithm::iterate(){
     matplotlibcpp::named_plot("Average elite fitness",elitFit);
     matplotlibcpp::grid(true);
     matplotlibcpp::xlim(0, (int) iterations);
-    matplotlibcpp::ylim(NegativeData->size()-PositiveData->size() - 1, (int) (Vars->getMaxFit() * 1.2));
+    matplotlibcpp::ylim((int) (NegativeData->size()-PositiveData->size() - 1), (int) (Vars->getMaxFit() * 1.2));
     matplotlibcpp::title("Algorithm runtime results");
     matplotlibcpp::legend();
     matplotlibcpp::pause(0.001);//*/

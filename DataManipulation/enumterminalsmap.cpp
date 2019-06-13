@@ -9,9 +9,9 @@
 enum{DONTADD = 0, ADD = 1};
 
 // Helpful functions for the back-end of the class
-void insertMappedSymbol(SymbolMapPtr *Map, char Letter, size_t Value); // Push a new node in the map
-void printMap(SymbolMapPtr Map);                                       // Print enumeration map
-size_t findInMap(SymbolMapPtr *Map, char c, bool add = DONTADD);       // Search symbol in a map
+void insertMappedSymbol(SymbolMapPtr *Map, std::string Letter, size_t Value); // Push a new node in the map
+void printMap(SymbolMapPtr Map);                                              // Print enumeration map
+size_t findInMap(SymbolMapPtr *Map, std::string c, bool add = DONTADD);       // Search symbol in a map
 
 using namespace std;
 
@@ -22,16 +22,24 @@ EnumTerminalsMap::EnumTerminalsMap(){
 EnumTerminalsMap::EnumTerminalsMap(std::string fname) : Map(NULL), MapSize(0)
 {
     string line;
+    string Letter;
     ifstream infile(fname); // open dataset
     // Find all the unique terminals for the grammar
     if(infile.is_open()){
         std::cout << "Reading file : " << fname << std::endl;
         while(getline(infile,line)){
             for(size_t i = 0;i<line.size();++i){
-                if(!findInMap(&Map,line[i],ADD)){             // search symbol and ADD if found
-                    MapSize++;                                // else create new integer and
-                    insertMappedSymbol(&Map,line[i],MapSize); // append the enumeration map
-                    //std::cout << line[i] << std::endl;      // Print the new symbol
+                if((char) line[i] == '(' ){
+                    Letter.clear();
+                }
+                else if ( (char) line[i] == ')' ){
+                    if(!findInMap(&Map,Letter,ADD)){
+                        MapSize++;
+                        insertMappedSymbol(&Map,Letter,MapSize);
+                    }
+                }
+                else{
+                    Letter.push_back(line[i]);
                 }
             }
         }
@@ -40,32 +48,41 @@ EnumTerminalsMap::EnumTerminalsMap(std::string fname) : Map(NULL), MapSize(0)
     printMap(Map);
 }
 
-size_t EnumTerminalsMap::returnEnum(char c){
+size_t EnumTerminalsMap::returnEnum(string c){
     return findInMap(&Map, c);
 }
 
 size_t EnumTerminalsMap::getMapSize(){
     return MapSize;
 }
-
+//*
 void EnumTerminalsMap::appendMapWithData(std::string fname){
     string line;
+    string Letter;
     ifstream infile(fname);
     // Find all the unique terminals for the grammar
     if(infile.is_open()){
         std::cout << "Reading more files : " << fname << std::endl;
         while(getline(infile,line)){
-            for(size_t i = 0;i<line.size()-1;++i){
-                if(!findInMap(&Map,line[i],ADD)){
-                    MapSize++;
-                    insertMappedSymbol(&Map, (char) line[i],MapSize);
+            for(size_t i = 0;i<line.size();++i){
+                if((char) line[i] == '(' ){
+                    Letter.clear();
+                }
+                else if ( (char) line[i] == ')' ){
+                    if(!findInMap(&Map,Letter,ADD)){
+                        MapSize++;
+                        insertMappedSymbol(&Map,Letter,MapSize);
+                    }
+                }
+                else{
+                    Letter.push_back(line[i]);
                 }
             }
         }
     }
     cout << "Enumeration terminals map possibly appended. Size of map is " << MapSize << " symbols." << endl;
     printMap(Map);
-}
+}//*/
 
 //Destructor
 EnumTerminalsMap::~EnumTerminalsMap(){
@@ -78,7 +95,7 @@ EnumTerminalsMap::~EnumTerminalsMap(){
     cout << "Freed memory for terminals map" << endl;
 }
 
-void insertMappedSymbol(SymbolMapPtr *Map, char Letter, size_t Value){
+void insertMappedSymbol(SymbolMapPtr *Map, std::string Letter, size_t Value){
     SymbolMapPtr newPtr = (SymbolMapPtr) malloc( sizeof(SymbolMap) ); // New node
     SymbolMapPtr currPtr = *Map;
     if(newPtr != NULL){
@@ -110,7 +127,7 @@ void printMap(SymbolMapPtr Map){
     cout << "__________________________________________________________________________________" << endl;
     cout << "| ";
     while (currPtr){
-        cout << currPtr->letter << " <->" << setw(4) << currPtr->value << " & " << setw(12) <<
+        cout << setw(7) << currPtr->letter << " <-> "  << currPtr->value << " & " << setw(8) <<
              currPtr->timesFound << " | ";
         if((!(currPtr->value%3))&&(currPtr->nextSymbol)) cout << endl << "| ";
         currPtr = currPtr->nextSymbol;
@@ -118,7 +135,7 @@ void printMap(SymbolMapPtr Map){
     cout << "\n----------------------------------------------------------------------------------" << endl;
 }
 
-size_t findInMap(SymbolMapPtr *Map, char c, bool add){
+size_t findInMap(SymbolMapPtr *Map, string c, bool add){
     SymbolMapPtr currPtr = *Map;
     if(currPtr == NULL) return 0;
     do{

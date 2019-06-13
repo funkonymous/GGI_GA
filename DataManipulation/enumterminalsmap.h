@@ -56,7 +56,7 @@ public:
     ~EnumTerminalsMap();                        // Free any allocated memory
     void appendMapWithData(std::string fname);  // Read more data
     void print() const;                         // Print the map
-    size_t returnEnum(char c);                  // Integer value for a Symbol
+    size_t returnEnum(std::string c);           // Integer value for a Symbol
     size_t getMapSize();                        // Get the max Symbol value
 private:
     SymbolMapPtr Map;                           // List structure for the map

@@ -33,6 +33,7 @@
 class DataWord
 {
 public:
+    DataWord(size_t maxLen,EnumTerminalsMap &m); // Create a random word
     DataWord(std::string w,EnumTerminalsMap &m); // Create the representation of the string
                                                  // in enumerated form
     ~DataWord();                                 // Free any allocated memory

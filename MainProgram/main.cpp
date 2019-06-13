@@ -33,7 +33,23 @@ int main(int argc, char **argv)
     delete G;
 
     printMemory();//*/
-
+    /*
+    string f1("DataSets/smalldata.dat");
+    string f2("DataSets/smalldata2.dat");
+    EnumTerminalsMap M1(f1);
+    M1.appendMapWithData(f2);
+    DataBase D(f2,M1);
+    M1.print();
+    for(size_t i = 0; i < D.size();++i){
+        D[i].printWord();
+    }
+    DataBase D2(10,3,M1);
+    for(size_t i = 0; i < D2.size();++i){
+        std::cout << i << " -> ";
+        D2[i].printWord();
+    }
+    std::cout << "Parsed??" << std::endl;
+    printMemory();//*/
     /*
     //string f1("DataSets/dna_cds.dat");
     //string f1("DataSets/smalldata.dat");

@@ -7,7 +7,25 @@ WordStructPtr insertWord(WordStructPtr *word, WordStructPtr last, std::string w,
                                                                                                         // and return a pointer to                                                                                                     // the last element
 using namespace std;
 
-//Constructor
+//Constructors
+
+DataBase::DataBase(size_t instances, size_t wordLength, EnumTerminalsMap &m)
+    : data(NULL), numberOfData(instances)
+{
+    dataPtrs = (WordStructPtr*) malloc(numberOfData * sizeof(WordStructPtr));
+    WordStructPtr firstWord = (WordStructPtr) malloc( sizeof(WordStruct) );
+    firstWord->word = new DataWord(wordLength,m);
+    data = lastData = dataPtrs[0] = firstWord;
+    for(size_t i = 1; i < numberOfData; ++i){
+        WordStructPtr newWord = (WordStructPtr) malloc( sizeof(WordStruct) );
+        newWord->word = new DataWord(wordLength,m);
+        newWord->nextword = NULL;
+        lastData->nextword = newWord;
+        dataPtrs[i] = newWord;
+        lastData = lastData->nextword;
+    }
+}
+
 DataBase::DataBase(std::string fname, EnumTerminalsMap &m) : data(NULL), numberOfData(0)
 {
     const clock_t begin_time = clock();                       // Count time for DB generation
@@ -23,6 +41,12 @@ DataBase::DataBase(std::string fname, EnumTerminalsMap &m) : data(NULL), numberO
         }
     }
     else cout << "Could not open file " << fname << "!!" << endl;
+    dataPtrs = (WordStructPtr*) malloc(numberOfData * sizeof(WordStructPtr));
+    WordStructPtr tempPtr = data;
+    for(size_t i = 0; i < numberOfData;++i){
+        dataPtrs[i] = tempPtr;
+        tempPtr = tempPtr->nextword;
+    }
     cout << numberOfData << " instances read in " <<
             float( clock () - begin_time ) /  CLOCKS_PER_SEC << " seconds" << endl;
 }
@@ -36,6 +60,7 @@ DataBase::~DataBase(){
         delete currPtr->word;                      // delete word in struct
         free (currPtr);                            // delete saved pointer.
     }
+    free(dataPtrs);
     std::cout << "Freed memory for " << numberOfData
               << " database instances" << std::endl;
 }
@@ -51,10 +76,12 @@ DataWord &DataBase::operator[](size_t n){
         std::cout << "Trying to access non-existent data in DB..." << std::endl;
         return *(CurrPtr->word);
     }
+    /*
     for(size_t i = 0; i < n; ++i){   // search for the nth instance of the DB
         CurrPtr = CurrPtr->nextword;
     }
-    return *(CurrPtr->word);         // Return a reference to the instance
+    return *(CurrPtr->word);         // Return a reference to the instance*/
+    return *(dataPtrs[n]->word);
 }
 
 

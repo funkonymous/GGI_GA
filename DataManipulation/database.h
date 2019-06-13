@@ -10,6 +10,8 @@
 // This is the database of the algorithm. Every instance in the ASCII file that is
 // represented by a line is stored in this class
 //
+// * Every symbol in a word must be in brackets "(a)" to register
+//
 // * Non-linear internal structure which is dynamicaly allocated while parsing the file.
 //
 // * No restriction other than the heap size of the machine running the code. Every row
@@ -46,6 +48,8 @@
 class DataBase
 {
 public:
+    DataBase(size_t instances, size_t wordLength,     // Random DB constructor for 'instances' size
+             EnumTerminalsMap &m);                    // and max word length, 'wordLength'
     DataBase(std::string fname, EnumTerminalsMap &m); // Construct a DB for a corresponding ASCII
                                                       // file with an enumeration map
     ~DataBase();                                      // Free any allocated memory
@@ -56,6 +60,7 @@ private:
     WordStructPtr data;                               // The data struct
     WordStructPtr lastData;                           // For faster insertion
     size_t numberOfData;                              // Number of instances in the DB
+    WordStructPtr *dataPtrs;                          // Pointers for faster accession to the data
 };
 
 #endif // DATABASE_H

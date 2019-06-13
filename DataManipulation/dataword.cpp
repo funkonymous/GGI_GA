@@ -1,16 +1,41 @@
 #include "dataword.h"
+#include <string>
 
 // Headers
 #include <iostream>
 
 
-//Constructor
-DataWord::DataWord(std::string w,EnumTerminalsMap &m) : wordLength(w.size())
-{
-    word = (size_t *) malloc(wordLength*sizeof(size_t));              // allocate needed memory
-    for(size_t i = 0;i<wordLength;++i) word[i] = m.returnEnum(w[i]);  // save enumerated word in
-}                                                                     // the allocated memory
+//Constructors
+DataWord::DataWord(size_t maxLen,EnumTerminalsMap &m){
+    wordLength = rand()%(maxLen) + 1;
+    word = (size_t *) malloc(wordLength * sizeof(size_t) );
+    for(size_t i = 0; i < wordLength; ++i){
+        word[i] = rand()%(m.getMapSize()) + 1;
+    }
+}
 
+DataWord::DataWord(std::string w,EnumTerminalsMap &m) : wordLength(0)
+{
+    for(size_t i = 0; i < w.size();++i){
+        if(w[i] == '(') wordLength++;
+    }
+    std::string Letter;
+    size_t offset = 0;
+    word = (size_t *) malloc(wordLength*sizeof(size_t));              // allocate needed memory
+    for(size_t i = 0;i<w.size();++i){                                 // save enumerated word in
+                                                                      // the allocated memory
+        if((char) w[i] == '(' ){
+            Letter.clear();
+        }
+        else if ( (char) w[i] == ')' ){
+            word[offset] = m.returnEnum(Letter);
+            offset++;
+        }
+        else{
+            Letter.push_back(w[i]);
+        }
+    }
+}
 
 //Destructor
 DataWord::~DataWord(){
