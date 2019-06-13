@@ -39,11 +39,11 @@ void Population::parse(DataBase &dat, AlgorithmVariables &V, bool dataOrigin){
     int startPosition = 0;
     startPosition = V.getFirstParse() ? ((int) (V.getElitismRate()*populationSize)) : 0;
     V.setFirstParse();
-#pragma omp parallel
+//#pragma omp parallel
 {
     for(size_t i = startPosition; i < populationSize; ++i){
         for(size_t j = 0; j < dat.size(); ++j){
-#pragma omp single
+//#pragma omp single
 {
             pool[i]->parse(dat[j],V,dataOrigin);
             //++eta;
