@@ -68,9 +68,7 @@ After this, type
     ./GGI_ACCEL
 
 and the help menu will be printed in the terminal. The executable runs with command
-line options described in the 
-[Testing/Experimenting](https://github.com/funkonymous/GGI_GA/new/master?readme=1#testingexperimenting) 
-paragraph.
+line options described in the Testing/Experimenting paragraph.
 
 ## Algorithm Description
 
@@ -148,6 +146,8 @@ and run
 or add any other flags you wish for. At the end of the execution you will find a new
 .png file in your /bin directory, this will be the graph of the fitness of the SGA
 implemented.
+
+Feel free to send any successful testing conducted as validation for this software. 
 
 ## Work on progress
 
