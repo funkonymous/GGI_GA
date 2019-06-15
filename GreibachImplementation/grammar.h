@@ -37,7 +37,7 @@ public:
     GrammarCodonPtr copyTo(size_t index);       // Copy genome [0,index)
     GrammarCodonPtr copyFrom(size_t index);     // Copy genome [index,end)
     size_t setOrigin(size_t offset);            // Terminal or Non-terminal in offset
-    float setFitness(float f);                  // Set the fitness of the individual
+    void setFitness(float f);                   // Set the fitness of the individual
     // Mutation
     void mutate(AlgorithmVariables &V);         // Replace a random symbol
     // Invalid GNFs checkink

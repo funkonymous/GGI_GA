@@ -406,7 +406,7 @@ void Grammar::mutate(AlgorithmVariables &V){
     }
 }
 
-float Grammar::setFitness(float f){
+void Grammar::setFitness(float f){
     fitness = f;
 }
 
