@@ -147,6 +147,10 @@ or add any other flags you wish for. At the end of the execution you will find a
 .png file in your /bin directory, this will be the graph of the fitness of the SGA
 implemented.
 
+I will upload some small datasets for minor testing eventually. You can create random
+data from a regex as artificial data from several python libraries that use Python's regex
+module.
+
 Feel free to send any successful testing conducted as validation for this software. 
 
 ## Work on progress
