@@ -171,7 +171,9 @@ of the output is like
     
 Only the first number in the body of each rule represents a terminal symbol. 0 represents
 the starting symbol. The correspondence of enumerated symbols and the datasets is printed 
-at the beginning of the execution of the program.
+at the beginning of the execution of the program. Each line represents a production rule.
+The last number in every line is the production rule length in symbols and is printed just
+to ensure that is individual grammar is stored correctly.
 
 ## Known bugs/issues
 
@@ -189,8 +191,9 @@ There are still several things on development.
 ### Active development
 
 1. Accelerate and optimize the algorithm, preferably on GPUs
-2. Create random negative data
-3. Integrate the software in a library
+2. Implement a more efficient parsing method
+3. Create random negative data
+4. Integrate the software in a library
 
 ### TODO list
 
