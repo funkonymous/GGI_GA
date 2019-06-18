@@ -147,11 +147,40 @@ or add any other flags you wish for. At the end of the execution you will find a
 .png file in your /bin directory, this will be the graph of the fitness of the SGA
 implemented.
 
+During the execution of the code, every major step prints various things in the terminal. For
+more information about the initialization process and the convergence of the algorithm try
+
+    ./GGI_ACCEL -p "Path/To/Positive" -n "Path/To/Negative" > A_File.txt
+   
+and the terminal output will be writen to "A_File.txt" in ASCII format.
+
 I will upload some small datasets for minor testing eventually. You can create random
 data from a regex as artificial data from several python libraries that use Python's regex
 module.
 
 Feel free to send any successful testing conducted as validation for this software. 
+
+### Interpreting the results
+
+After, the halt of the algorithm, a CFG will be printed in the terminal. Note that the formation
+of the output is like
+
+    0 -> 2 14 15  4
+    14 -> 1  2
+    15 -> 3  2
+    
+Only the first number in the body of each rule represents a terminal symbol. 0 represents
+the starting symbol. The correspondence of enumerated symbols and the datasets is printed 
+at the beginning of the execution of the program.
+
+## Known bugs/issues
+
+1. As of the first working commits this project has been checked with [Valgrind](http://valgrind.org/) and there
+seems to be no issue with memory leaks etc.
+
+2. There seem to be no logic errors with the project as of the latest commit.
+
+3. The oprimization of the code has been done through [PgProf](https://www.pgroup.com/resources/pgprof-quickstart.htm)
 
 ## Work on progress
 
