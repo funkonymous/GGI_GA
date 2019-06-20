@@ -1,4 +1,5 @@
 ###############################################################################
+
 cmake_minimum_required (VERSION 2.8)
 project (GreibachCrammaticalInferenceAccelerated)
 
@@ -27,7 +28,7 @@ include_directories(
 
 #add_library(ggi ${GGI_ACCEL_SOURCE_FILES})
 
-#file(COPY DataSets DESTINATION bin)
+file(COPY DataFromRegex/RegexDataSets DESTINATION bin)
 ###############################################################################
 #
 add_executable(GGI_ACCEL
