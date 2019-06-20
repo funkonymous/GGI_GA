@@ -2,6 +2,8 @@
 #define GREIBACHSETS_H
 
 #include "enumterminalsmap.h"
+#include <iostream>
+#include <fstream>
 
 // This class represents is a container of the boundaries of the sets (S,N,T) of a formal
 // grammar in the Greibach Normal Form. The boundaries are saved in an enumerated form to
@@ -40,6 +42,7 @@ public:
     void printSets() const;                                    // Print the enumerated sets boundaries
     size_t getRandomTerminal() const;                          // Select a random symbol from set T
     size_t getRandomNonTerminal() const;                       // Select a random symbol from (N U S)
+    void WriteLog(std::ofstream &f) const;                     // Write log files
 private:
     size_t StartSymbol;       // Starting symbol numerical representation
     size_t TerminalsStart;    // Start of Terminal Symbols set numerical representation

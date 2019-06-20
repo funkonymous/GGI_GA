@@ -2,6 +2,8 @@
 #define ENUMTERMINALSMAP_H
 
 #include <string>
+#include <iostream>
+#include <fstream>
 
 #include "datautilities.h"
 
@@ -58,6 +60,7 @@ public:
     void print() const;                         // Print the map
     size_t returnEnum(std::string c);           // Integer value for a Symbol
     size_t getMapSize();                        // Get the max Symbol value
+    void WriteLog(std::ofstream &f) const;      // Write the log file
 private:
     SymbolMapPtr Map;                           // List structure for the map
     size_t MapSize;                             // Size of the list

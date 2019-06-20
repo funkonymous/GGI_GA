@@ -195,6 +195,12 @@ GeneticAlgorithm::GeneticAlgorithm(int argc, char **argv) : iterations(0)
     elitFit.reserve(Vars->getMaxGens());
 
     Vars->print();
+
+    std::ofstream my_file(Vars->LogName());
+    Vars->WriteLog(my_file);
+    Map->WriteLog(my_file);
+
+    my_file << "\nIteration\tBestFitnes\tEliteFitnes\tMemoryUsage" << std::endl;
 }
 
 GeneticAlgorithm::~GeneticAlgorithm(){
@@ -223,6 +229,9 @@ void GeneticAlgorithm::iterate(){
     bestFit.push_back(Pool->getBestFit());
     elitFit.push_back(Pool->getElitFit());
     ++iterations;
+    std::ofstream my_file;
+    my_file.open(Vars->LogName(),std::ios_base::app);
+    my_file << iterations << "\t\t" << bestFit.back() << "\t\t" << elitFit.back() << "\t\t" << getMem() << std::endl;
     //*
     matplotlibcpp::clf();
     matplotlibcpp::named_plot("Best fitness",bestFit);

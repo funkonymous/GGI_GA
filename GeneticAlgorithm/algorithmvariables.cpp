@@ -182,3 +182,32 @@ void AlgorithmVariables::print() const{
     std::cout << "\t 1) Text log : " << logfile << std::endl;
     std::cout << "\t 2) Plotted graph : " << logimage << std::endl;
 }
+
+void AlgorithmVariables::WriteLog(std::ofstream &f) const{
+    f << " ~ Greibach grammatical inference algorithm running with variables ~" << std::endl;
+    f << "   -> Genetic algorithm variables : " << std::endl;
+    f << "\t 1) Pool size : " << poolSize << std::endl;
+    f << "\t 2) Mutation Rate : " << mutationRate << std::endl;
+    f << "\t 3) Elitism : " << elitism << std::endl;
+    f << "\t 4) Parental portion : " << ParentalPortion << std::endl;
+    f << "\t 5) Maximum number of generations : " << maxGens << std::endl;
+    f << "\t 6) Convergence fitness rate : " << terminationFitness << std::endl;
+    f << "\t 7) Confusion matrix for fitness estimation : " << "\n\t >>" <<
+                 " TP : " << weightsMatrix[0][0] << " || FP : " << weightsMatrix[0][1] <<
+                 " || FN : " << weightsMatrix[1][0] << " || TN : " << weightsMatrix[1][1] << std::endl;
+    f << "\t 8) Absolute convergence fitness value : " << absConvFitness << std::endl;
+    f << "   -> Greibach Normal Form variables : " << std::endl;
+    f << "\t 1) Number of non-terminal symbols : " << NoNTerms << std::endl;
+    f << "\t 2) Maximum rule length in the initial population : " << MaxRuleLen << std::endl;
+    f << "\t 3) Maximum number of rules in the initial population : " << MaxNoRules << std::endl;
+    f << "\t 4) Subparse variable : " << subParse << std::endl;
+    f << "   -> Log files : " << std::endl;
+    f << "\t 1) Text log : " << logfile << std::endl;
+    f << "\t 2) Plotted graph : " << logimage << std::endl;
+
+    Gsets.WriteLog(f);
+}
+
+std::string AlgorithmVariables::LogName() const{
+    return logfile;
+}

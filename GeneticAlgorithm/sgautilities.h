@@ -31,6 +31,12 @@ inline void process_mem_usage(double& vm_usage, double& resident_set)
         resident_set = rss * page_size_kb;
 }
 
+inline float getMem(){
+    double vm, rss;
+    process_mem_usage(vm, rss);
+    return rss/8192.0;
+}
+
 inline void printMemory(){
     double vm, rss;
     process_mem_usage(vm, rss);

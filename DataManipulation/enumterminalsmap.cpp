@@ -148,3 +148,23 @@ size_t findInMap(SymbolMapPtr *Map, string c, bool add){
     }while(currPtr);
     return 0;
 }
+
+void EnumTerminalsMap::WriteLog(std::ofstream &f) const{
+    f << "\n ~ Enumeration Map in correspondence to the datasets ~" << std::endl;
+    if(Map == NULL){
+        f << "Enumeration map is empty!!" << endl;
+        return;
+    }
+    SymbolMapPtr currPtr = Map;
+    f << "Enumerated terminal symbols mapping :" << endl <<
+            "Symbol <-> Enumeration & Times Found" << endl;
+    f << "__________________________________________________________________________________" << endl;
+    f << "| ";
+    while (currPtr){
+        f << setw(7) << currPtr->letter << " <-> "  << currPtr->value << " & " << setw(8) <<
+             currPtr->timesFound << " | ";
+        if((!(currPtr->value%3))&&(currPtr->nextSymbol)) f << endl << "| ";
+        currPtr = currPtr->nextSymbol;
+    }
+    f << "\n----------------------------------------------------------------------------------" << endl;
+}

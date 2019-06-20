@@ -43,3 +43,18 @@ void GreibachSets::printSets() const{
                  " |" << std::setw(11) << NonTerminalEnd << " |" << std::endl;
     std::cout << "+----------------------+--------------+------------+" << std::endl;
 }
+
+void GreibachSets::WriteLog(std::ofstream &f) const{
+    f << "\n ~ Greibach Sets ~" << std::endl;
+    f << "+----------------------+--------------+------------+" << std::endl;
+    f << "| Set Name             | Start number | End number |" << std::endl;
+    f << "+----------------------+--------------+------------+" << std::endl;
+    f << "| Starting Symbol      |            0 |          0 |" << std::endl;
+    f << "+----------------------+--------------+------------+" << std::endl;
+    f << "| Terminal Symbols     |" << std::setw(13) << TerminalsStart <<
+                 " |" << std::setw(11) << TerminalsEnd << " |" << std::endl;
+    f << "+----------------------+--------------+------------+" << std::endl;
+    f << "| Non Terminal Symbols |" << std::setw(13) << NonTerminalStart <<
+                 " |" << std::setw(11) << NonTerminalEnd << " |" << std::endl;
+    f << "+----------------------+--------------+------------+" << std::endl;
+}

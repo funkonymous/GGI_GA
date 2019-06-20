@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "greibachsets.h"
 #include <string>
+#include <iostream>
+#include <fstream>
 
 // Here are stored all the variables of the algorithm of grammatical inference.
 // Changes in this class members take effect during the runtime of the algorithm
@@ -38,6 +40,7 @@ public:
     size_t getMaxGens() const;                 // Maximum generations
     float getMaxFit() const;                   // Maximum fitness before convergence
     std::string ImageName() const;             // Get the name to save the image
+    std::string LogName() const;               // Get the name of the log file
     bool getFirstParse() const;
     // Set methods
     void setGNFsets(EnumTerminalsMap &M);      // This must be done during initialization
@@ -61,6 +64,7 @@ public:
     void setFirstParse();                      // Say that the first parse was done
     // Print method
     void print() const;                        // Print the current state of the algorithm's variables
+    void WriteLog(std::ofstream &f) const;     // Write the log file
 private:
     // SGA variables
     float mutationRate = 0.03;      // Mutation rate 0.03 = 3%
