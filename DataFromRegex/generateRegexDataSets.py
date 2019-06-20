@@ -9,7 +9,7 @@ if not os.path.exists(directory) :
 
 PosFileAstart = open(directory+'/'+"PosData.txt","w")
 
-for i in range(99) :
+for i in range(299) :
     word = exrex.getone('[a-f]{6,7}[a-c]{1,3}[a-f]{4,7}[a-c]{1,3}')
     for i in range(len(word)) :
         PosFileAstart.write('(')
@@ -26,7 +26,7 @@ PosFileAstart.close()
 
 PosFileBstart = open(directory+'/'+"NegData.txt","w")
 
-for i in range(99) :
+for i in range(299) :
     word = exrex.getone('[a-f]{6,7}[d-f]{1,3}[a-f]{4,7}[d-f]{1,3}')
     for i in range(len(word)) :
         PosFileBstart.write('(')
