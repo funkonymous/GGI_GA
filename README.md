@@ -154,11 +154,40 @@ more information about the initialization process and the convergence of the alg
    
 and the terminal output will be writen to "A_File.txt" in ASCII format.
 
-I will upload some small datasets for minor testing eventually. You can create random
-data from a regex as artificial data from several python libraries that use Python's regex
-module.
+There are two datasets provided for minor experimenting, a 
+[positive dataset](https://github.com/funkonymous/GGI_GA/blob/master/DataFromRegex/RegexDataSets/PosData.txt) and a 
+[negative dataset](https://github.com/funkonymous/GGI_GA/blob/master/DataFromRegex/RegexDataSets/NegData.txt).
 
-Feel free to send any successful testing conducted as validation for this software. 
+These datasets were created by a 
+[python script]https://github.com/funkonymous/GGI_GA/blob/master/DataFromRegex/generateRegexDataSets.py using
+the [exrex](https://github.com/asciimoo/exrex) module. For more information about the module visit the corresponding
+repository.
+
+For the two datasets, random strings were generated from these regular expressions :
+
+    [a-f]{6,7}[a-c]{2,3}[a-f]{4,7}[a-c]{1,3} <- Positive dataset
+    [a-f]{6,7}[d-f]{2,3}[a-f]{4,7}[d-f]{1,3} <- Negative dataset
+
+Note, that it is important the the intersection of the two sets is a '''NULL''' set, else, the estimated
+maximum fitness will be false and the algorithm will not halt even if it should !
+
+There are 300 instances (strings) in each dataset. Note that, because of the complexity of the algorithm,
+a quick experiment may run for multiple hours.
+
+To run an experiment, type :
+
+    ./GGI_ACCEL -p "RegexDataSets/PosData.txt" -n "RegexDataSets/NegData.txt" -r 5 -R 30 -N 5 -P 1000 -s 0.1 -g 500
+
+These options should be sufficient.
+
+1. -r 5 -> maximum rule length = 5
+2. -R 30 -> maximum number of rules = 30
+3. -N 5 -> number of non-terminal symbols = 5
+4. -P 1000 -> population size = 1000
+5. -s 0.1 -> subparse variable = 0.1
+6. -g 500 -> maximum iterations (generations) = 500
+
+Finally, feel free to send any successful testing conducted as validation for this software. 
 
 ### Interpreting the results
 
@@ -174,6 +203,25 @@ the starting symbol. The correspondence of enumerated symbols and the datasets i
 at the beginning of the execution of the program. Each line represents a production rule.
 The last number in every line is the production rule length in symbols and is printed just
 to ensure that is individual grammar is stored correctly.
+
+In a typical experiment for the datasets explained in the previous paragraph, the results 
+printed in the terminal should look like this :
+
+![Alt text](derivedCFG.png?raw=true "Title")
+
+This is a CFG and the meaning of the symbols is printed at the start of the algorithm in the 
+terminal like this :
+
+![Alt text](enumMap.png?raw=true "Title")
+
+Every number that does not have a corresponding symbol is a non-terminal symbol.
+
+Finally, the progress of the algorithm is also stored as a graph in the /bin directory
+after the conclusion of the algorithm.
+
+![Alt text](log.png?raw=true "Title")
+
+All the results are also stored in a log file in ASCII form.
 
 ## Known bugs/issues
 
@@ -198,12 +246,13 @@ There are still several things on development.
 ### TODO list
 
 1. Finish the writing of log files
-2. Have multiple checks for the validity of the offsprings on demand
-3. Make an official release of the software on github
+2. Make a readable representation of the derived GNF grammar
+3. Have multiple checks for the validity of the offsprings on demand
+4. Make an official release of the software on github
 
 ## Additional information
 
-1. This software was written in [QT creator](https://www.qt.io/) 
+1. This software was written in [QT creator](https://www.qt.io/) and [VIM](https://www.vim.org/)
 2. Many thanks to everyone whose code was used for this project
 3. The original idea was inspired by Prof. [Evangelos Dermatas](https://scholar.google.com/citations?user=ireNT3QAAAAJ&hl=en)
 4. Contact the author of this software [here](https://www.linkedin.com/in/anastasopoulosnikolas/)
